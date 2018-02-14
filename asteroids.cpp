@@ -64,7 +64,7 @@ class Global {
 	Global() {
 	    xres = 1250;
 	    yres = 900;
-	    gravity = .09;
+	    gravity = 1.5;
 	    memset(keys, 0, 65536);
 	}
 } gl;
@@ -299,9 +299,6 @@ void normalize2d(Vec v)
 void check_mouse(XEvent *e)
 {
     //Was a mouse button clicked?
-    static int savex = 0;
-    static int savey = 0;
-    static int ct=0;
     if (e->type != ButtonPress &&
 	    e->type != ButtonRelease &&
 	    e->type != MotionNotify) {
@@ -413,8 +410,17 @@ void physics()
 */
     if (gl.keys[XK_w] && g.ship.pos[1] <= 10)
     {
-	g.ship.vel[1] += 5;
+	g.ship.vel[1] += 30;
     }
+
+    if (gl.keys[XK_d])
+    {
+	g.ship.pos[0] += 10;
+    }
+    if (gl.keys[XK_a])
+{
+g.ship.pos[0] -= 10;
+}
 }
 
 void render()
