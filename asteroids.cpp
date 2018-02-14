@@ -42,7 +42,6 @@ typedef Flt	Matrix[4][4];
 (c)[2]=(a)[2]-(b)[2]
 //constants
 const float TIMESLICE = 1.0f;
-const float GRAVITY = -0.2f;
 #define PI 3.141592653589793
 #define ALPHA 1
 const int MAX_BULLETS = 11;
@@ -64,7 +63,7 @@ class Global {
 	Global() {
 	    xres = 1250;
 	    yres = 900;
-	    gravity = .09;
+	    gravity = 1.5;
 	    memset(keys, 0, 65536);
 	}
 } gl;
@@ -87,36 +86,21 @@ class Ship {
 	    color[0] = color[1] = color[2] = 1.0;
 	}
 };
-/*
-class Bullet {
-    public:
-	Vec pos;
-	Vec vel;
-	float color[3];
-	struct timespec time;
-    public:
-	Bullet() { }
-};
-*/
+
 class Game {
     public:
 	Ship ship;
-//	Bullet *barr;
 	int nasteroids;
 	int nbullets;
 	struct timespec bulletTimer;
 	struct timespec mouseThrustTimer;
-	//	bool mouseThrustOn;
     public:
 	Game(){
-//	    barr = new Bullet[MAX_BULLETS];
 	    nasteroids = 0;
 	    nbullets = 0;
-	    //	    mouseThrustOn = false;
 	    clock_gettime(CLOCK_REALTIME, &bulletTimer);
 	}
 	~Game() {
-//	    delete [] barr;
 	}
 } g;
 
@@ -299,17 +283,14 @@ void normalize2d(Vec v)
 void check_mouse(XEvent *e)
 {
     //Was a mouse button clicked?
-    static int savex = 0;
-    static int savey = 0;
-    static int ct=0;
     if (e->type != ButtonPress &&
 	    e->type != ButtonRelease &&
 	    e->type != MotionNotify) {
 	return;
-	}
-	if (e->xbutton.button==3) {
-	    //Right button is down
-	}
+    }
+    if (e->xbutton.button==3) {
+	//Right button is down
+    }
 }
 
 int check_keys(XEvent *e)
@@ -345,7 +326,7 @@ int check_keys(XEvent *e)
 	    break;
 	case XK_minus:
 	    break;
-        case XK_w:
+	case XK_w:
 	    break;
     }
     return 0;
@@ -360,60 +341,40 @@ void physics()
     //update ship velocity due to gravity
     if (g.ship.pos[1] > 10)
     {
-    	g.ship.vel[1] -= gl.gravity;
+	g.ship.vel[1] -= gl.gravity;
     }
 
     //Check for collision with window edges
-    if (g.ship.pos[0] < 0.0) {
-	g.ship.pos[0] += (float)gl.xres;
+    if (g.ship.pos[0] < 15) {
+	g.ship.pos[0] = 15;
     }
-    else if (g.ship.pos[0] > (float)gl.xres) {
-	g.ship.pos[0] -= (float)gl.xres;
+    if (g.ship.pos[0] > 1235) {
+	g.ship.pos[0] = 1235;
     }
-    else if (g.ship.pos[1] < 10) {
+    if (g.ship.pos[1] < 10) {
 	g.ship.pos[1] += (float)gl.yres;
 	g.ship.pos[1] = 10;
 	g.ship.vel[1] = 0;
     }
-    else if (g.ship.pos[1] > (float)gl.yres) {
+    if (g.ship.pos[1] > (float)gl.yres) {
 	g.ship.pos[1] -= (float)gl.yres;
     }
- 
+
     //---------------------------------------------------
     //check keys pressed now
-/*
-    if (gl.keys[XK_Left]) {
-	g.ship.angle += 4.0;
-	if (g.ship.angle >= 360.0f)
-	    g.ship.angle -= 360.0f;
-    }
-    if (gl.keys[XK_Right]) {
-	g.ship.angle -= 4.0;
-	if (g.ship.angle < 0.0f)
-	    g.ship.angle += 360.0f;
-    }
-    if (gl.keys[XK_Up]) {
-	//apply thrust
-	//convert ship angle to radians
-	Flt rad = ((g.ship.angle+90.0) / 360.0f) * PI * 2.0;
-	//convert angle to a vector
-	Flt xdir = cos(rad);
-	Flt ydir = sin(rad);
-	g.ship.vel[0] += xdir*0.02f;
-	g.ship.vel[1] += ydir*0.02f;
-	Flt speed = sqrt(g.ship.vel[0]*g.ship.vel[0]+
-		g.ship.vel[1]*g.ship.vel[1]);
-	if (speed > 10.0f) {
-	    speed = 10.0f;
-	    normalize2d(g.ship.vel);
-	    g.ship.vel[0] *= speed;
-	    g.ship.vel[1] *= speed;
-	}
-    }
-*/
+
     if (gl.keys[XK_w] && g.ship.pos[1] <= 10)
     {
-	g.ship.vel[1] += 5;
+	g.ship.vel[1] += 30;
+    }
+
+    if (gl.keys[XK_d])
+    {
+	g.ship.pos[0] += 10;
+    }
+    if (gl.keys[XK_a])
+    {
+	g.ship.pos[0] -= 10;
     }
 }
 
