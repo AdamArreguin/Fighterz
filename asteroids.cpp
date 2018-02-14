@@ -59,10 +59,12 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 class Global {
     public:
 	int xres, yres;
+	float gravity;
 	char keys[65536];
 	Global() {
 	    xres = 1250;
 	    yres = 900;
+	    gravity = .09;
 	    memset(keys, 0, 65536);
 	}
 } gl;
@@ -343,6 +345,8 @@ int check_keys(XEvent *e)
 	    break;
 	case XK_minus:
 	    break;
+        case XK_w:
+	    break;
     }
     return 0;
 }
@@ -352,6 +356,13 @@ void physics()
     //Update ship position
     g.ship.pos[0] += g.ship.vel[0];
     g.ship.pos[1] += g.ship.vel[1];
+
+    //update ship velocity due to gravity
+    if (g.ship.pos[1] > 10)
+    {
+    	g.ship.vel[1] -= gl.gravity;
+    }
+
     //Check for collision with window edges
     if (g.ship.pos[0] < 0.0) {
 	g.ship.pos[0] += (float)gl.xres;
@@ -359,8 +370,10 @@ void physics()
     else if (g.ship.pos[0] > (float)gl.xres) {
 	g.ship.pos[0] -= (float)gl.xres;
     }
-    else if (g.ship.pos[1] < 0.0) {
+    else if (g.ship.pos[1] < 10) {
 	g.ship.pos[1] += (float)gl.yres;
+	g.ship.pos[1] = 10;
+	g.ship.vel[1] = 0;
     }
     else if (g.ship.pos[1] > (float)gl.yres) {
 	g.ship.pos[1] -= (float)gl.yres;
@@ -368,6 +381,7 @@ void physics()
  
     //---------------------------------------------------
     //check keys pressed now
+/*
     if (gl.keys[XK_Left]) {
 	g.ship.angle += 4.0;
 	if (g.ship.angle >= 360.0f)
@@ -395,6 +409,11 @@ void physics()
 	    g.ship.vel[0] *= speed;
 	    g.ship.vel[1] *= speed;
 	}
+    }
+*/
+    if (gl.keys[XK_w] && g.ship.pos[1] <= 10)
+    {
+	g.ship.vel[1] += 5;
     }
 }
 
