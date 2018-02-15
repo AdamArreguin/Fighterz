@@ -61,9 +61,9 @@ class Global {
 	float gravity;
 	char keys[65536];
 	Global() {
-	    xres = 1250;
+	    xres = 1600;
 	    yres = 900;
-	    gravity = 1.5;
+	    gravity = .6;
 	    memset(keys, 0, 65536);
 	}
 } gl;
@@ -348,8 +348,8 @@ void physics()
     if (g.ship.pos[0] < 15) {
 	g.ship.pos[0] = 15;
     }
-    if (g.ship.pos[0] > 1235) {
-	g.ship.pos[0] = 1235;
+    if (g.ship.pos[0] >= 1585) {
+	g.ship.pos[0] = 1585;
     }
     if (g.ship.pos[1] < 10) {
 	g.ship.pos[1] += (float)gl.yres;
@@ -363,18 +363,14 @@ void physics()
     //---------------------------------------------------
     //check keys pressed now
 
-    if (gl.keys[XK_w] && g.ship.pos[1] <= 10)
-    {
+    //Jump height
+    if (gl.keys[XK_w] && g.ship.pos[1] <= 10) {
 	g.ship.vel[1] += 30;
-    }
-
-    if (gl.keys[XK_d])
-    {
-	g.ship.pos[0] += 10;
-    }
-    if (gl.keys[XK_a])
-    {
-	g.ship.pos[0] -= 10;
+    //Walk/Jump speed/distance
+    } else if (gl.keys[XK_d]) {
+	g.ship.pos[0] += 5;
+    } else if (gl.keys[XK_a]) {
+	g.ship.pos[0] -= 5;
     }
 }
 
