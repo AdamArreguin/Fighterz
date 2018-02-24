@@ -179,6 +179,7 @@ void render();
 extern void backGl();
 extern void backgroundRender();
 extern void displayName(const char*, int, int);
+extern void playerHealthRender();
 
 //==========================================================================
 // M A I N
@@ -199,6 +200,7 @@ int main()
 	}
 	physics();
 	render();
+	playerHealthRender();
 	x11.swapBuffers();
     }
     cleanup_fonts();
@@ -367,7 +369,6 @@ void render()
     glVertex2f(0.0f, 0.0f);
     glEnd();
     glPopMatrix();
-	
     const char* P1 = "Player 1";
     const char* P2 = "Player 2";
     displayName(P1, 900, 1);
