@@ -25,3 +25,11 @@ void displayName (const char* s, int xres, int i)
     }
     ggprint16(&r, 32, 0x00ffffff, s);
 }
+
+void controls (int x, int y, const char *s)
+{
+	Rect r;
+	r.left = x;
+	r.bot = y;
+	ggprint16(&r, 32, 0x00ffffff, s);
+}
