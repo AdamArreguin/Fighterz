@@ -228,9 +228,6 @@ void init_opengl()
     glEnable(GL_TEXTURE_2D);
     initialize_fonts();
 
-    //gl textures for background
-    //backGl();
-
 }
 
 void normalize2d(Vec v)
@@ -347,6 +344,10 @@ void physics()
 void render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    //render background
+    backgroundRender();
+
     //-------------
     //Draw the ship
     glColor3fv(g.ship.color);
@@ -361,7 +362,7 @@ void render()
     glVertex2f(  0.0f, 20.0f);
     glVertex2f( 12.0f, -10.0f);
     glEnd();
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_POINTS);
     glVertex2f(0.0f, 0.0f);
     glEnd();
