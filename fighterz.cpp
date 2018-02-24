@@ -179,7 +179,7 @@ void render();
 extern void backGl();
 extern void backgroundRender();
 extern void displayName(const char*, int, int);
-
+extern void controls (int, int, const char*);
 //==========================================================================
 // M A I N
 //==========================================================================
@@ -367,11 +367,25 @@ void render()
     glVertex2f(0.0f, 0.0f);
     glEnd();
     glPopMatrix();
-	
+
+    //Display player names
     const char* P1 = "Player 1";
     const char* P2 = "Player 2";
     displayName(P1, 900, 1);
     displayName(P2, 900, 2);
+
+    //Display controls
+    const char* CONTROLS = "CONTROLS";
+    const char* LINE = "-------------------";
+    const char* JUMP = "Jump: W";
+    const char* LEFT = "Move Left: A";
+    const char* RIGHT = "Move Right: D";
+    controls(75, 850, CONTROLS);
+    controls(87, 840, LINE);
+    controls(80, 795, LEFT);
+    controls(83, 770, RIGHT);
+    controls(60, 820, jump);
+
     //render background
     //backgroundRender();
 }
