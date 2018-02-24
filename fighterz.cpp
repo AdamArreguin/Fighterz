@@ -384,7 +384,7 @@ void render()
     controls(87, 840, LINE);
     controls(80, 795, LEFT);
     controls(83, 770, RIGHT);
-    controls(60, 820, jump);
+    controls(60, 820, JUMP);
 
     //render background
     //backgroundRender();
