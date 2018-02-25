@@ -364,7 +364,7 @@ void render()
     glVertex2f(  0.0f, -6.0f);
     glVertex2f(  0.0f, -6.0f);
     glVertex2f(  0.0f, 20.0f);
-    glVertex2f( 12.0f, -10.0t);
+    glVertex2f( 12.0f, -10.0f);
     glEnd();
     glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_POINTS);
