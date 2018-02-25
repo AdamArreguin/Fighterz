@@ -16,27 +16,12 @@ class background {
 	int xres, yres;
 	Texture tex;
 	background() {
-	   xres=640, yres=480;
+	   xres= 1250, yres= 900;
 	}
 } b;
 
 void backGl()
 {
-    //OpenGL initialization
-    glViewport(0, 0, b.xres, b.yres);
-    //Initialize matrices
-    //glMatrixMode(GL_PROJECTION); glLoadIdentity();
-    //glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-    //This sets 2D mode (no perspective)
-    glOrtho(0, b.xres, 0, b.yres, -1, 1);
-    //Clear the screen
-    //glClearColor(1.0, 1.0, 1.0, 1.0);
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //Do this to allow texture maps
-    //glEnable(GL_TEXTURE_2D);
-    //
-
-
     //load the images file into a ppm structure.
     //
     b.tex.backImage = &img[0];
@@ -57,8 +42,6 @@ void backGl()
 
 void backgroundRender()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1.0, 1.0, 1.0);
     glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
     glBegin(GL_QUADS);
         glTexCoord2f(b.tex.xc[0], b.tex.yc[1]); glVertex2i(0, 0);
