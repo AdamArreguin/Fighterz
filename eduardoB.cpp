@@ -22,7 +22,7 @@ class background {
 
 void backGl()
 {
-    glColor3f(1.0f,1.0f,1.0f);
+    
     //load the images file into a ppm structure.
     //
     b.tex.backImage = &img[0];
@@ -43,7 +43,7 @@ void backGl()
 
 void backgroundRender()
 {
-    //glColor(1.0,1.0,1.0, 1.0);
+    glColor3f(1.0f,1.0f,1.0f);
     glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
     glBegin(GL_QUADS);
         glTexCoord2f(b.tex.xc[0], b.tex.yc[1]); glVertex2i(0, 0);

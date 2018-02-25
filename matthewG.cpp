@@ -27,6 +27,7 @@ void playerHealthRender() {
 	r.center = 0;
 	ggprint16(&r, 32, 0x00ffffff, "Player Health: %i", pl.health);
 
+
 }
 
 void playerRender() {
