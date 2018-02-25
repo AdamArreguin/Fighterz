@@ -10,10 +10,10 @@
 #include "header.h"
 
 // Display name of characters
-void displayName (const char* s, int xres, int i)
+void displayName (const char* s, int yres, int i)
 {
     Rect r;
-    r.bot = xres - 50;
+    r.bot = yres - 50;
 
     switch (i) {
 	case 1:
