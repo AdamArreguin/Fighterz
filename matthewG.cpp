@@ -22,10 +22,11 @@ class player {
 
 void playerHealthRender() {
 	Rect r;
-	r.bot = 675;
-	r.left = 10;
+	r.bot = 800;
+	r.left = 425;
 	r.center = 0;
-	ggprint8b(&r, 16, 0x00ffff00, "Health: %i", pl.health);
+	ggprint16(&r, 32, 0x00ffffff, "Player Health: %i", pl.health);
+
 
 }
 

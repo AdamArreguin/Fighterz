@@ -66,110 +66,110 @@ class Game {
 
 //X Windows variables
 class X11_wrapper {
-	private:
-		Display *dpy;
-		Window win;
-		GLXContext glc;
-	public:
-		X11_wrapper() {
-			GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
-			//GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
-			XSetWindowAttributes swa;
-			setup_screen_res(gl.xres, gl.yres);
-			dpy = XOpenDisplay(NULL);
-			if (dpy == NULL) {
-				std::cout << "\n\tcannot connect to X server" << std::endl;
-				exit(EXIT_FAILURE);
-			}
-			Window root = DefaultRootWindow(dpy);
-			XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
-			if (vi == NULL) {
-				std::cout << "\n\tno appropriate visual found\n" << std::endl;
-				exit(EXIT_FAILURE);
-			} 
-			Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
-			swa.colormap = cmap;
-			swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
-				PointerMotionMask | MotionNotify | ButtonPress | ButtonRelease |
-				StructureNotifyMask | SubstructureNotifyMask;
-			win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
-					vi->depth, InputOutput, vi->visual,
-					CWColormap | CWEventMask, &swa);
-			set_title();
-			glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
-			glXMakeCurrent(dpy, win, glc);
-			show_mouse_cursor(0);
-		}
-		~X11_wrapper() {
-			XDestroyWindow(dpy, win);
-			XCloseDisplay(dpy);
-		}
-		void set_title() {
-			//Set the window title bar.
-			XMapWindow(dpy, win);
-			XStoreName(dpy, win, "Asteroids template");
-		}
-		void check_resize(XEvent *e) {
-			//The ConfigureNotify is sent by the
-			//server if the window is resized.
-			if (e->type != ConfigureNotify)
-				return;
-			XConfigureEvent xce = e->xconfigure;
-			if (xce.width != gl.xres || xce.height != gl.yres) {
-				//Window size did change.
-				reshape_window(xce.width, xce.height);
-			}
-		}
-		void reshape_window(int width, int height) {
-			//window has been resized.
-			setup_screen_res(width, height);
-			glViewport(0, 0, (GLint)width, (GLint)height);
-			glMatrixMode(GL_PROJECTION); glLoadIdentity();
-			glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-			glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
-			set_title();
-		}
-		void setup_screen_res(const int w, const int h) {
-			gl.xres = w;
-			gl.yres = h;
-		}
-		void swapBuffers() {
-			glXSwapBuffers(dpy, win);
-		}
-		bool getXPending() {
-			return XPending(dpy);
-		}
-		XEvent getXNextEvent() {
-			XEvent e;
-			XNextEvent(dpy, &e);
-			return e;
-		}
-		void set_mouse_position(int x, int y) {
-			XWarpPointer(dpy, None, win, 0, 0, 0, 0, x, y);
-		}
-		void show_mouse_cursor(const int onoff) {
-			if (onoff) {
-				//this removes our own blank cursor.
-				XUndefineCursor(dpy, win);
-				return;
-			}
-			//vars to make blank cursor
-			Pixmap blank;
-			XColor dummy;
-			char data[1] = {0};
-			Cursor cursor;
-			//make a blank cursor
-			blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
-			if (blank == None)
-				std::cout << "error: out of memory." << std::endl;
-			cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0);
-			XFreePixmap(dpy, blank);
-			//this makes you the cursor. then set it using this function
-			XDefineCursor(dpy, win, cursor);
-			//after you do not need the cursor anymore use this function.
-			//it will undo the last change done by XDefineCursor
-			//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
-		}
+    private:
+	Display *dpy;
+	Window win;
+	GLXContext glc;
+    public:
+	X11_wrapper() {
+	    GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
+	    //GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
+	    XSetWindowAttributes swa;
+	    setup_screen_res(gl.xres, gl.yres);
+	    dpy = XOpenDisplay(NULL);
+	    if (dpy == NULL) {
+		std::cout << "\n\tcannot connect to X server" << std::endl;
+		exit(EXIT_FAILURE);
+	    }
+	    Window root = DefaultRootWindow(dpy);
+	    XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
+	    if (vi == NULL) {
+		std::cout << "\n\tno appropriate visual found\n" << std::endl;
+		exit(EXIT_FAILURE);
+	    } 
+	    Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
+	    swa.colormap = cmap;
+	    swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
+		PointerMotionMask | MotionNotify | ButtonPress | ButtonRelease |
+		StructureNotifyMask | SubstructureNotifyMask;
+	    win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
+		    vi->depth, InputOutput, vi->visual,
+		    CWColormap | CWEventMask, &swa);
+	    set_title();
+	    glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
+	    glXMakeCurrent(dpy, win, glc);
+	    show_mouse_cursor(0);
+	}
+	~X11_wrapper() {
+	    XDestroyWindow(dpy, win);
+	    XCloseDisplay(dpy);
+	}
+	void set_title() {
+	    //Set the window title bar.
+	    XMapWindow(dpy, win);
+	    XStoreName(dpy, win, "FighterZ");
+	}
+	void check_resize(XEvent *e) {
+	    //The ConfigureNotify is sent by the
+	    //server if the window is resized.
+	    if (e->type != ConfigureNotify)
+		return;
+	    XConfigureEvent xce = e->xconfigure;
+	    if (xce.width != gl.xres || xce.height != gl.yres) {
+		//Window size did change.
+		reshape_window(xce.width, xce.height);
+	    }
+	}
+	void reshape_window(int width, int height) {
+	    //window has been resized.
+	    setup_screen_res(width, height);
+	    glViewport(0, 0, (GLint)width, (GLint)height);
+	    glMatrixMode(GL_PROJECTION); glLoadIdentity();
+	    glMatrixMode(GL_MODELVIEW); glLoadIdentity();
+	    glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
+	    set_title();
+	}
+	void setup_screen_res(const int w, const int h) {
+	    gl.xres = w;
+	    gl.yres = h;
+	}
+	void swapBuffers() {
+	    glXSwapBuffers(dpy, win);
+	}
+	bool getXPending() {
+	    return XPending(dpy);
+	}
+	XEvent getXNextEvent() {
+	    XEvent e;
+	    XNextEvent(dpy, &e);
+	    return e;
+	}
+	void set_mouse_position(int x, int y) {
+	    XWarpPointer(dpy, None, win, 0, 0, 0, 0, x, y);
+	}
+	void show_mouse_cursor(const int onoff) {
+	    if (onoff) {
+		//this removes our own blank cursor.
+		XUndefineCursor(dpy, win);
+		return;
+	    }
+	    //vars to make blank cursor
+	    Pixmap blank;
+	    XColor dummy;
+	    char data[1] = {0};
+	    Cursor cursor;
+	    //make a blank cursor
+	    blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
+	    if (blank == None)
+		std::cout << "error: out of memory." << std::endl;
+	    cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0);
+	    XFreePixmap(dpy, blank);
+	    //this makes you the cursor. then set it using this function
+	    XDefineCursor(dpy, win, cursor);
+	    //after you do not need the cursor anymore use this function.
+	    //it will undo the last change done by XDefineCursor
+	    //(thus do only use ONCE XDefineCursor and then XUndefineCursor):
+	}
 } x11;
 
 //function prototypes

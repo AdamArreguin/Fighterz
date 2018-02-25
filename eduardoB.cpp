@@ -38,17 +38,18 @@ void backGl()
 	b.tex.xc[1] = 0.25;
 	b.tex.yc[0] = 0.0;
 	b.tex.yc[1] = 1.0;
+
 }
 
 void backgroundRender()
 {
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(b.tex.xc[0], b.tex.yc[1]); glVertex2i(0, 0);
-	glTexCoord2f(b.tex.xc[0], b.tex.yc[0]); glVertex2i(0, b.yres);
-	glTexCoord2f(b.tex.xc[1], b.tex.yc[0]); glVertex2i(b.xres, b.yres);
-	glTexCoord2f(b.tex.xc[1], b.tex.yc[1]); glVertex2i(b.xres, 0);
-	glEnd();
 
+    glColor3f(1.0f,1.0f,1.0f);
+    glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
+    glBegin(GL_QUADS);
+        glTexCoord2f(b.tex.xc[0], b.tex.yc[1]); glVertex2i(0, 0);
+        glTexCoord2f(b.tex.xc[0], b.tex.yc[0]); glVertex2i(0, b.yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[0]); glVertex2i(b.xres, b.yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[1]); glVertex2i(b.xres, 0);
+    glEnd();
 }
