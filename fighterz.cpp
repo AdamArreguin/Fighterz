@@ -1,40 +1,7 @@
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <ctime>
-#include <cmath>
 using namespace std;
-#include <unistd.h>
-#include <X11/Xlib.h>
-//#include <X11/Xutil.h>
-//#include <GL/gl.h>
-//#include <GL/glu.h>
-#include <X11/keysym.h>
-#include <GL/glx.h>
-#include "log.h"
-#include "fonts.h"
 
-//defined types
-typedef float Flt;
-typedef float Vec[3];
-typedef Flt	Matrix[4][4];
+#include "header.h"
 
-//macros
-#define rnd() (((Flt)rand())/(Flt)RAND_MAX)
-#define random(a) (rand()%(a))
-#define VecZero(v) (v)[0]=0.0,(v)[1]=0.0,(v)[2]=0.0
-#define MakeVector(x, y, z, v) (v)[0]=(x),(v)[1]=(y),(v)[2]=(z)
-#define VecCopy(a,b) (b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
-#define VecDot(a,b)	((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
-#define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
-			     (c)[1]=(a)[1]-(b)[1]; \
-(c)[2]=(a)[2]-(b)[2]
-//constants
-const float TIMESLICE = 1.0f;
-#define PI 3.141592653589793
-#define ALPHA 1
-const int MAX_BULLETS = 11;
-const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 
 //-----------------------------------------------------------------------------
 //Setup timers
@@ -136,7 +103,7 @@ class X11_wrapper {
 	void set_title() {
 	    //Set the window title bar.
 	    XMapWindow(dpy, win);
-	    XStoreName(dpy, win, "Asteroids template");
+	    XStoreName(dpy, win, "FighterZ");
 	}
 	void check_resize(XEvent *e) {
 	    //The ConfigureNotify is sent by the
@@ -208,6 +175,13 @@ int check_keys(XEvent *e);
 void physics();
 void render();
 
+//extern prototypes
+extern void backGl();
+extern void backgroundRender();
+extern void displayName(const char*, int, int);
+extern void displayScore(const char*, int,int);
+extern void playerHealthRender();
+extern void controls (int, int, const char*);
 //==========================================================================
 // M A I N
 //==========================================================================
@@ -227,6 +201,7 @@ int main()
 	}
 	physics();
 	render();
+	playerHealthRender();
 	x11.swapBuffers();
     }
     cleanup_fonts();
@@ -236,6 +211,7 @@ int main()
 
 void init_opengl()
 {
+    backGl();
     //OpenGL initialization
     glViewport(0, 0, gl.xres, gl.yres);
     //Initialize matrices
@@ -249,11 +225,13 @@ void init_opengl()
     glDisable(GL_FOG);
     glDisable(GL_CULL_FACE);
     //
+    //
     //Clear the screen to black
     glClearColor(0.0, 0.0, 0.0, 1.0);
     //Do this to allow fonts
     glEnable(GL_TEXTURE_2D);
     initialize_fonts();
+
 }
 
 void normalize2d(Vec v)
@@ -370,6 +348,10 @@ void physics()
 void render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    //render background
+    backgroundRender();
+
     //-------------
     //Draw the ship
     glColor3fv(g.ship.color);
@@ -384,12 +366,33 @@ void render()
     glVertex2f(  0.0f, 20.0f);
     glVertex2f( 12.0f, -10.0f);
     glEnd();
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_POINTS);
     glVertex2f(0.0f, 0.0f);
     glEnd();
     glPopMatrix();
 
+    //Display player names
+    const char* P1 = "Player 1";
+    const char* P2 = "Player 2";
+    displayName(P1, 900, 1);
+    displayName(P2, 900, 2);
+    const char* SC = "Scores :";
+    displayScore(SC,800,1);
+    //Display controls
+    const char* CONTROLS = "CONTROLS";
+    const char* LINE = "-------------------";
+    const char* JUMP = "Jump: W";
+    const char* LEFT = "Move Left: A";
+    const char* RIGHT = "Move Right: D";
+    controls(75, 850, CONTROLS);
+    controls(87, 840, LINE);
+    controls(80, 795, LEFT);
+    controls(83, 770, RIGHT);
+    controls(60, 820, JUMP);
+
+    //render background
+    //backgroundRender();
 }
 
 
