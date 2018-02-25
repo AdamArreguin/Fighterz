@@ -179,6 +179,7 @@ void render();
 extern void backGl();
 extern void backgroundRender();
 extern void displayName(const char*, int, int);
+extern void displayScore(const char*, int,int);
 extern void playerHealthRender();
 extern void controls (int, int, const char*);
 //==========================================================================
@@ -362,7 +363,7 @@ void render()
     glVertex2f(  0.0f, -6.0f);
     glVertex2f(  0.0f, -6.0f);
     glVertex2f(  0.0f, 20.0f);
-    glVertex2f( 12.0f, -10.0f);
+    glVertex2f( 12.0f, -10.0t);
     glEnd();
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_POINTS);
@@ -375,7 +376,8 @@ void render()
     const char* P2 = "Player 2";
     displayName(P1, 900, 1);
     displayName(P2, 900, 2);
-
+    const char* SC = "Scores :";
+    displayScore(SC,800,1);
     //Display controls
     const char* CONTROLS = "CONTROLS";
     const char* LINE = "-------------------";
