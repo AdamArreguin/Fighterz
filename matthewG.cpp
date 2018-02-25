@@ -34,9 +34,9 @@ void playerRender() {
 }
 
 void takePunch() {
-	health -= 5;
+	pl.health -= 5;
 }
 
 void takeKick() {
-	health -= 10;
+	pl.health -= 10;
 }
