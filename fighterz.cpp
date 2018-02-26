@@ -11,53 +11,72 @@ extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
 
+Display* d = XOpenDisplay(NULL);
+Screen* s = DefaultScreenOfDisplay(d);
 class Global {
+<<<<<<< HEAD
     public:
 	int xres, yres;
 	float gravity;
 	char keys[65536];
 	Global() {
-	    xres = 1250;
-	    yres = 900;
+	    xres = s->width;
+	    yres = s->height;
+		cout << "xres: " << xres << endl;
+		cout << "yres: " << yres << endl;
 	    gravity = 1.5;
 	    memset(keys, 0, 65536);
 	}
+=======
+	public:
+		int xres, yres;
+		float gravity;
+		char keys[65536];
+		Global(){
+			xres = s->width;
+			yres = s->height;
+			cout << "xres: " << xres << endl;
+			cout << "yres: " << yres << endl;
+			gravity = 1.5;
+			memset(keys, 0, 65536);
+		}
+>>>>>>> 1f6bb84fd75453950793b2d5d79d47dfbf4f851e
 } gl;
 
 class Ship {
-    public:
-	Vec dir;
-	Vec pos;
-	Vec vel;
-	float angle;
-	float color[3];
-    public:
-	Ship() {
-	    VecZero(dir);
-	    pos[0] = 200; // Starting point for fighter 1
-	    pos[1] = 10;
-	    pos[2] = 0.0f;
-	    VecZero(vel);
-	    angle = 0.0;
-	    color[0] = color[1] = color[2] = 1.0;
-	}
+	public:
+		Vec dir;
+		Vec pos;
+		Vec vel;
+		float angle;
+		float color[3];
+	public:
+		Ship() {
+			VecZero(dir);
+			pos[0] = 200; // Starting point for fighter 1
+			pos[1] = 10;
+			pos[2] = 0.0f;
+			VecZero(vel);
+			angle = 0.0;
+			color[0] = color[1] = color[2] = 1.0;
+		}
 };
 
 class Game {
-    public:
-	Ship ship;
-	int nasteroids;
-	int nbullets;
-	struct timespec bulletTimer;
-	struct timespec mouseThrustTimer;
-    public:
-	Game(){
-	    nasteroids = 0;
-	    nbullets = 0;
-	    clock_gettime(CLOCK_REALTIME, &bulletTimer);
-	}
-	~Game() {
-	}
+	public:
+		Ship ship;
+		int nasteroids;
+		int nbullets;
+		struct timespec bulletTimer;
+		struct timespec mouseThrustTimer;
+	public:
+		Game(){
+			nasteroids = 0;
+			nbullets = 0;
+			clock_gettime(CLOCK_REALTIME, &bulletTimer);
+		}
+		~Game() {
+		}
 } g;
 
 //X Windows variables
@@ -103,7 +122,11 @@ class X11_wrapper {
 	void set_title() {
 	    //Set the window title bar.
 	    XMapWindow(dpy, win);
-	    XStoreName(dpy, win, "Asteroids template");
+<<<<<<< HEAD
+	    XStoreName(dpy, win, "Street Fighter Z");
+=======
+	    XStoreName(dpy, win, "FighterZ");
+>>>>>>> 1f6bb84fd75453950793b2d5d79d47dfbf4f851e
 	}
 	void check_resize(XEvent *e) {
 	    //The ConfigureNotify is sent by the
@@ -113,8 +136,8 @@ class X11_wrapper {
 	    XConfigureEvent xce = e->xconfigure;
 	    if (xce.width != gl.xres || xce.height != gl.yres) {
 		//Window size did change.
-		reshape_window(xce.width, xce.height);
-	    }
+			reshape_window(xce.width, xce.height);
+		}
 	}
 	void reshape_window(int width, int height) {
 	    //window has been resized.
@@ -178,106 +201,136 @@ void render();
 //extern prototypes
 extern void backGl();
 extern void backgroundRender();
-extern void displayName(const char*, int, int);
+extern void displayName(const char*, int, int, int);
+extern void displayScore(const char*, int,int);
+extern void playerHealthRender();
 extern void controls (int, int, const char*);
+extern void displayAuthors(bool);
 //==========================================================================
 // M A I N
 //==========================================================================
 int main()
-{
-    logOpen();
-    init_opengl();
-    srand(time(NULL));
-    x11.set_mouse_position(100, 100);
-    int done=0;
-    while (!done) {
-	while (x11.getXPending()) {
-	    XEvent e = x11.getXNextEvent();
-	    x11.check_resize(&e);
-	    check_mouse(&e);
-	    done = check_keys(&e);
+{ 
+	int fps = 30;
+	int t0, t1, frame_time;
+	clock_t t;
+
+	logOpen();
+	init_opengl();
+	srand(time(NULL));
+	x11.set_mouse_position(100, 100);
+	int done=0;
+	while (!done) {
+		while (x11.getXPending()) {
+			XEvent e = x11.getXNextEvent();
+			x11.check_resize(&e);
+			check_mouse(&e);
+			done = check_keys(&e);
+		}
+		physics();
+		t = clock();
+		t0 = t;
+		render();
+		t1 = t;
+		frame_time = t1-t0;
+		sleep(1/fps - frame_time);
+		playerHealthRender();
+		x11.swapBuffers();
 	}
-	physics();
-	render();
-	x11.swapBuffers();
-    }
-    cleanup_fonts();
-    logClose();
-    return 0;
+	cleanup_fonts();
+	logClose();
+	return 0;
 }
 
 void init_opengl()
 {
-    backGl();
-    //OpenGL initialization
-    glViewport(0, 0, gl.xres, gl.yres);
-    //Initialize matrices
-    glMatrixMode(GL_PROJECTION); glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-    //This sets 2D mode (no perspective)
-    glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
-    //
-    glDisable(GL_LIGHTING);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_FOG);
-    glDisable(GL_CULL_FACE);
-    //
-    //
-    //Clear the screen to black
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    //Do this to allow fonts
-    glEnable(GL_TEXTURE_2D);
-    initialize_fonts();
-
-    //gl textures for background
-    //backGl();
+	backGl();
+	//OpenGL initialization
+	glViewport(0, 0, gl.xres, gl.yres);
+	//Initialize matrices
+	glMatrixMode(GL_PROJECTION); glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW); glLoadIdentity();
+	//This sets 2D mode (no perspective)
+	glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
+	//
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_FOG);
+	glDisable(GL_CULL_FACE);
+	//
+	//
+	//Clear the screen to black
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	//Do this to allow fonts
+	glEnable(GL_TEXTURE_2D);
+	initialize_fonts();
 
 }
 
 void normalize2d(Vec v)
 {
-    Flt len = v[0]*v[0] + v[1]*v[1];
-    if (len == 0.0f) {
-	v[0] = 1.0;
-	v[1] = 0.0;
-	return;
-    }
-    len = 1.0f / sqrt(len);
-    v[0] *= len;
-    v[1] *= len;
+	Flt len = v[0]*v[0] + v[1]*v[1];
+	if (len == 0.0f) {
+		v[0] = 1.0;
+		v[1] = 0.0;
+		return;
+	}
+	len = 1.0f / sqrt(len);
+	v[0] *= len;
+	v[1] *= len;
 }
 
 void check_mouse(XEvent *e)
 {
-    //Was a mouse button clicked?
-    if (e->type != ButtonPress &&
-	    e->type != ButtonRelease &&
-	    e->type != MotionNotify) {
-	return;
-    }
-    if (e->xbutton.button==3) {
-	//Right button is down
-    }
+	//Was a mouse button clicked?
+	if (e->type != ButtonPress &&
+			e->type != ButtonRelease &&
+			e->type != MotionNotify) {
+		return;
+	}
+	if (e->xbutton.button==3) {
+		//Right button is down
+	}
 }
 
 int check_keys(XEvent *e)
 {
-    //keyboard input?
-    static int shift=0;
-    if (e->type != KeyPress && e->type != KeyRelease)
+	//keyboard input?
+	static int shift=0;
+	if (e->type != KeyPress && e->type != KeyRelease)
+		return 0;
+	int key = (XLookupKeysym(&e->xkey, 0) & 0x0000ffff);
+	//Log("key: %i\n", key);
+	if (e->type == KeyRelease) {
+		gl.keys[key]=0;
+		if (key == XK_Shift_L || key == XK_Shift_R)
+			shift=0;
+		return 0;
+	}
+	gl.keys[key]=1;
+	if (key == XK_Shift_L || key == XK_Shift_R) {
+		shift=1;
+		return 0;
+	}
+	(void)shift;
+	switch (key) {
+		case XK_Escape:
+			return 1;
+		case XK_f:
+			break;
+		case XK_s:
+			break;
+		case XK_Down:
+			break;
+		case XK_equal:
+			break;
+		case XK_minus:
+			break;
+		case XK_w:
+			break;
+	}
 	return 0;
-    int key = (XLookupKeysym(&e->xkey, 0) & 0x0000ffff);
-    //Log("key: %i\n", key);
-    if (e->type == KeyRelease) {
-	gl.keys[key]=0;
-	if (key == XK_Shift_L || key == XK_Shift_R)
-	    shift=0;
-	return 0;
-    }
-    gl.keys[key]=1;
-    if (key == XK_Shift_L || key == XK_Shift_R) {
-	shift=1;
-	return 0;
+<<<<<<< HEAD
     }
     (void)shift;
     switch (key) {
@@ -295,12 +348,18 @@ int check_keys(XEvent *e)
 	    break;
 	case XK_w:
 	    break;
+	case XK_n:
+		break;
     }
     return 0;
+=======
+>>>>>>> 1f6bb84fd75453950793b2d5d79d47dfbf4f851e
 }
 
 void physics()
 {
+<<<<<<< HEAD
+	bool displayNames = false;
     //Update ship position
     g.ship.pos[0] += g.ship.vel[0];
     g.ship.pos[1] += g.ship.vel[1];
@@ -343,11 +402,66 @@ void physics()
     {
 	g.ship.pos[0] -= 10;
     }
+	if (gl.keys[XK_n] && displayNames == false)
+	{
+		displayNames = true;
+	}
+	if (gl.keys[XK_n] && displayNames == true) {
+		displayNames = false;
+=======
+	//Update ship position
+	g.ship.pos[0] += g.ship.vel[0];
+	g.ship.pos[1] += g.ship.vel[1];
+
+	//update ship velocity due to gravity
+	if (g.ship.pos[1] > 10)
+	{
+		g.ship.vel[1] -= gl.gravity;
+	}
+
+	//Check for collision with window edges
+	if (g.ship.pos[0] < 15) {
+		g.ship.pos[0] = 15;
+	}
+	if (g.ship.pos[0] > 1235) {
+		g.ship.pos[0] = 1235;
+	}
+	if (g.ship.pos[1] < 10) {
+		g.ship.pos[1] += (float)gl.yres;
+		g.ship.pos[1] = 10;
+		g.ship.vel[1] = 0;
+	}
+	if (g.ship.pos[1] > (float)gl.yres) {
+		g.ship.pos[1] -= (float)gl.yres;
+	}
+
+	//---------------------------------------------------
+	//check keys pressed now
+
+	if (gl.keys[XK_w] && g.ship.pos[1] <= 10)
+	{
+		g.ship.vel[1] += 30;
+	}
+
+	if (gl.keys[XK_d])
+	{
+		g.ship.pos[0] += 10;
+	}
+	if (gl.keys[XK_a])
+	{
+		g.ship.pos[0] -= 10;
+>>>>>>> 1f6bb84fd75453950793b2d5d79d47dfbf4f851e
+	}
 }
 
 void render()
 {
+<<<<<<< HEAD
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    //render background
+    backgroundRender();
+
     //-------------
     //Draw the ship
     glColor3fv(g.ship.color);
@@ -362,7 +476,7 @@ void render()
     glVertex2f(  0.0f, 20.0f);
     glVertex2f( 12.0f, -10.0f);
     glEnd();
-    glColor3f(1.0f, 0.0f, 0.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_POINTS);
     glVertex2f(0.0f, 0.0f);
     glEnd();
@@ -371,23 +485,72 @@ void render()
     //Display player names
     const char* P1 = "Player 1";
     const char* P2 = "Player 2";
-    displayName(P1, 900, 1);
-    displayName(P2, 900, 2);
-
+    displayName(P1, gl.xres, gl.yres, 1);
+    displayName(P2, gl.xres, gl.yres, 2);
+    const char* SC = "Scores :";
+    displayScore(SC,800,1);
     //Display controls
-    const char* CONTROLS = "CONTROLS";
-    const char* LINE = "-------------------";
-    const char* JUMP = "Jump: W";
-    const char* LEFT = "Move Left: A";
+    const char* CONTROLS = "P1 CONTROLS";
+    const char* LINE = "-----------------------";
+    const char* JUMP =  "Jump:       W";
+    const char* LEFT =  "Move Left:  A";
     const char* RIGHT = "Move Right: D";
-    controls(75, 850, CONTROLS);
-    controls(87, 840, LINE);
-    controls(80, 795, LEFT);
-    controls(83, 770, RIGHT);
-    controls(60, 820, JUMP);
-
+    controls(50, gl.yres, CONTROLS);
+    controls(60, gl.yres, LINE);
+    controls(75, gl.yres, JUMP);
+    controls(100, gl.yres, LEFT);
+    controls(125, gl.yres, RIGHT);
+	//displayAuthors(displayNames);
     //render background
     //backgroundRender();
+=======
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//render background
+	backgroundRender();
+
+	//-------------
+	//Draw the ship
+	glColor3fv(g.ship.color);
+	glPushMatrix();
+	glTranslatef(g.ship.pos[0], g.ship.pos[1], g.ship.pos[2]);
+	glRotatef(g.ship.angle, 0.0f, 0.0f, 1.0f);
+	glBegin(GL_TRIANGLES);
+	glVertex2f(-12.0f, -10.0f);
+	glVertex2f(  0.0f, 20.0f);
+	glVertex2f(  0.0f, -6.0f);
+	glVertex2f(  0.0f, -6.0f);
+	glVertex2f(  0.0f, 20.0f);
+	glVertex2f( 12.0f, -10.0f);
+	glEnd();
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_POINTS);
+	glVertex2f(0.0f, 0.0f);
+	glEnd();
+	glPopMatrix();
+
+	//Display player names
+	const char* P1 = "Player 1";
+	const char* P2 = "Player 2";
+	displayName(P1, 900, 1);
+	displayName(P2, 900, 2);
+	const char* SC = "Scores :";
+	displayScore(SC,800,1);
+	//Display controls
+	const char* CONTROLS = "CONTROLS";
+	const char* LINE = "-------------------";
+	const char* JUMP = "Jump: W";
+	const char* LEFT = "Move Left: A";
+	const char* RIGHT = "Move Right: D";
+	controls(75, 850, CONTROLS);
+	controls(87, 840, LINE);
+	controls(80, 795, LEFT);
+	controls(83, 770, RIGHT);
+	controls(60, 820, JUMP);
+
+	//render background
+	//backgroundRender();
+>>>>>>> 1f6bb84fd75453950793b2d5d79d47dfbf4f851e
 }
 
 
