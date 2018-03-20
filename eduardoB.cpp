@@ -1,70 +1,133 @@
 //Eduardo's stuff
+#include <time.h>
+#include <stdio.h>
 #include "header.h"
 
 Image img[1] = {"seamless_back.jpg"};
+Image img2[1] = {"opt2_back.jpg"};
 
 class Texture {
-public:
-    Image *backImage;
-    GLuint backTexture;
-    float xc[2];
-    float yc[2];
+	public:
+		Image *backImage;
+		GLuint backTexture;
+		float xc[2];
+		float yc[2];
 };
 
 class background {
-    public:
-	int xres, yres;
-	Texture tex;
-	background() {
-	   xres=640, yres=480;
-	}
+	public:
+		//int xres, yres;
+		Texture tex;
+		background() {
+		//	xres= s->width, yres= s->height;
+		}
 } b;
 
 void backGl()
 {
-    //OpenGL initialization
-    glViewport(0, 0, b.xres, b.yres);
-    //Initialize matrices
-    //glMatrixMode(GL_PROJECTION); glLoadIdentity();
-    //glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-    //This sets 2D mode (no perspective)
-    glOrtho(0, b.xres, 0, b.yres, -1, 1);
-    //Clear the screen
-    //glClearColor(1.0, 1.0, 1.0, 1.0);
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //Do this to allow texture maps
-    //glEnable(GL_TEXTURE_2D);
-    //
+	//load the images file into a ppm structure.
+	//
+	b.tex.backImage = &img[0];
+	//create opengl texture elements
+	glGenTextures(1, &b.tex.backTexture);
+	int w = b.tex.backImage->width;
+	int h = b.tex.backImage->height;
+	glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+			GL_RGB, GL_UNSIGNED_BYTE, b.tex.backImage->data);
+	b.tex.xc[0] = 0.0;
+	b.tex.xc[1] = 0.25;
+	b.tex.yc[0] = 0.0;
+	b.tex.yc[1] = 1.0;
 
-
-    //load the images file into a ppm structure.
-    //
-    b.tex.backImage = &img[0];
-    //create opengl texture elements
-    glGenTextures(1, &b.tex.backTexture);
-    int w = b.tex.backImage->width;
-    int h = b.tex.backImage->height;
-    glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-                            GL_RGB, GL_UNSIGNED_BYTE, b.tex.backImage->data);
-    b.tex.xc[0] = 0.0;
-    b.tex.xc[1] = 0.25;
-    b.tex.yc[0] = 0.0;
-    b.tex.yc[1] = 1.0;
 }
 
-void backgroundRender()
+void displayTime(int xres, int yres, const char *s)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1.0, 1.0, 1.0);
+    Rect r;
+    r.left = xres/4;
+    r.bot = yres/4;
+    ggprint16(&r, 32, 0x00ffffff, s);
+}
+
+void backgroundRender(int xres, int yres)
+{
+
+    clock_t timer;
+    char s[100];
+    char name[20];
+    float diff;
+
+    static double elapsedTime;
+    
+    timer = clock();
+
+    ///////////////////////////////////////////////////////////
+    glColor3f(1.0f,1.0f,1.0f);
     glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
     glBegin(GL_QUADS);
         glTexCoord2f(b.tex.xc[0], b.tex.yc[1]); glVertex2i(0, 0);
-        glTexCoord2f(b.tex.xc[0], b.tex.yc[0]); glVertex2i(0, b.yres);
-        glTexCoord2f(b.tex.xc[1], b.tex.yc[0]); glVertex2i(b.xres, b.yres);
-        glTexCoord2f(b.tex.xc[1], b.tex.yc[1]); glVertex2i(b.xres, 0);
+        glTexCoord2f(b.tex.xc[0], b.tex.yc[0]); glVertex2i(0, yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[0]); glVertex2i(xres, yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[1]); glVertex2i(xres, 0);
     glEnd();
+    ///////////////////////////////////////////////////////////
+
+    //load the images file into a ppm structure.
+	//
+	b.tex.backImage = &img2[0];
+	//create opengl texture elements
+	glGenTextures(1, &b.tex.backTexture);
+	int w = b.tex.backImage->width;
+	int h = b.tex.backImage->height;
+	glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+			GL_RGB, GL_UNSIGNED_BYTE, b.tex.backImage->data);
+	b.tex.xc[0] = 0.0;
+	b.tex.xc[1] = 0.25;
+	b.tex.yc[0] = 0.0;
+	b.tex.yc[1] = 1.0;
+
+    //////////////////////////////////////////////////////////
+
+    clock_t timer2;
+    char s2[100];
+    float diff2;
+
+    static double elapsedTime2;
+    
+    timer2 = clock();
+
+    glColor3f(1.0f,1.0f,1.0f);
+    glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
+    glBegin(GL_QUADS);
+        glTexCoord2f(b.tex.xc[0], b.tex.yc[1]); glVertex2i(0, 0);
+        glTexCoord2f(b.tex.xc[0], b.tex.yc[0]); glVertex2i(0, yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[0]); glVertex2i(xres, yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[1]); glVertex2i(xres, 0);
+    glEnd();
+
+    //////////////////////////////////////////////////////////
+
+
+    sprintf(name, "Eduardo Barajas");
+    displayTime(xres + 280, yres + 120,name);
+
+    diff = clock() - timer;
+    elapsedTime += diff;
+
+    sprintf(s, "Elapsed_Time: %f", (elapsedTime/CLOCKS_PER_SEC));
+    displayTime(xres,yres,s);
+
+
+    diff2 = clock() - timer2;
+    elapsedTime2 += diff2;
+
+    sprintf(s2, "optimized Elapsed_Time: %f", (elapsedTime2/CLOCKS_PER_SEC));
+    displayTime(xres,yres - 120,s2);
 
 }

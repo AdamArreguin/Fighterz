@@ -15,7 +15,7 @@ using namespace std;
 #include <stdlib.h>
 #include "log.h"
 #include "fonts.h"
-
+#include "matthewG.h"
 //defined types
 typedef float Flt;
 typedef float Vec[3];
