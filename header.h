@@ -32,6 +32,7 @@ typedef Flt     Matrix[4][4];
                              (c)[1]=(a)[1]-(b)[1]; \
 (c)[2]=(a)[2]-(b)[2]
 
+#define PROFILING_ON false
 
 //constants
 const float TIMESLICE = 1.0f;

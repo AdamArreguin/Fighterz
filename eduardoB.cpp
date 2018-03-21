@@ -94,6 +94,8 @@ void backgroundRender(int xres, int yres)
 
     //////////////////////////////////////////////////////////
 
+    if(PROFILING_ON != 0)
+    {
     clock_t timer2;
     char s2[100];
     float diff2;
@@ -129,5 +131,5 @@ void backgroundRender(int xres, int yres)
 
     sprintf(s2, "optimized Elapsed_Time: %f", (elapsedTime2/CLOCKS_PER_SEC));
     displayTime(xres,yres - 120,s2);
-
+    }
 }
