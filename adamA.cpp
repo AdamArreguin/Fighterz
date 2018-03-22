@@ -24,6 +24,8 @@ void drawHealthBar1(int x, int y)
     ggprint16(&r, 16, 0x00ffffff, "Fighter 1");
     glPopMatrix();
 
+if(PROFILING_ON != 0)
+{
     static float end = 0;
     end += clock() - start;
 
@@ -40,7 +42,7 @@ void drawHealthBar1(int x, int y)
     r.center = 1;
     ggprint16(&r, 16, 0x00ffffff, "Adam Arreguin");
     glPopMatrix();
-
+}
 }
 
 void drawHealthBar2(int x, int y)
