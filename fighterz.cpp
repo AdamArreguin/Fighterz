@@ -408,8 +408,10 @@ void render()
 	displayName(P1, 900, 1);
 	displayName(P2, 900, 2);
 	const char* SC = "Scores :";
+	if(PROFILING_ON !=0){
 	displayScore(SC,800,1);
 	displayScoreOpt(SC,800,1);
+	}
 	/*
 	 * Commenting out for clean look and used when we create
 	 * a main menu
