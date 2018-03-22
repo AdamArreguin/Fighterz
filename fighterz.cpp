@@ -15,14 +15,16 @@ class Global {
 	public:
 		int xres, yres;
 		float gravity;
-		int keyHeldr = 0;
-		int keyHeldf = 0;
+		int keyHeldr;
+		int keyHeldf;
 		char keys[65536];
 		Global(){
 			xres = 1280;
 			yres = 720;
 			gravity = 1.5;
 			memset(keys, 0, 65536);
+			keyHeldr = 0;
+			keyHeldf = 0;
 		}
 } gl;
 
