@@ -143,10 +143,12 @@ void spriteRender(double xPos, double yPos, double zPos) {
     glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_ALPHA_TEST);
+	if(PROFILING_ON != 0)
+    {
 	elapsedTime += clock() - timer;
 	sprintf(t,"Elapsed Time: %f", (elapsedTime/CLOCKS_PER_SEC));
 	funcTimer(t);
-
+}
 }
 
 int spritePunch() {
