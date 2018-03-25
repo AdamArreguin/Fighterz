@@ -52,12 +52,15 @@ class sprite {
 		int xres, yres;
 		SpriteTexture spTex;
 		int spriteFrame;
-		sprite() {
+		sprite(int sFrame) {
 			xres= 1024, yres= 64;
-			spriteFrame=0;
+			spriteFrame=sFrame;
 		}
-} sp;
-sprite sp2;
+} sp(0);
+sprite sp2(8);
+
+//TODO remove duplicate functions and call sprite class from main.
+//TODO change player direction based on other players position 
 
 void initSprite() {
 	//load the images file into a ppm structure.
