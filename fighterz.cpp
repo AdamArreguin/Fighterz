@@ -195,9 +195,9 @@ extern void countdown(int, int);
 int main()
 { 
 
-	int fps = 30;
-	int t0, t1, frame_time;
-	clock_t t;
+	//int fps = 30;
+	//int t0, t1, frame_time;
+	//clock_t t;
 
 	logOpen();
 	init_opengl();
@@ -212,13 +212,13 @@ int main()
 			done = check_keys(&e);
 		}
 		physics();
-		t = clock();
-		t0 = t;
+		//t = clock();
+		//t0 = t;
 		render();
 		//spritePunch();
-		t1 = t;
-		frame_time = t1-t0;
-		sleep(1/fps - frame_time);
+		//t1 = t;
+		//frame_time = t1-t0;
+		//sleep(1/fps - frame_time);
 		x11.swapBuffers();
 	}
 	cleanup_fonts();
@@ -419,37 +419,37 @@ void physics()
 	//---------------------------------------------------
 	//check keys pressed now
 
-	if (gl.keys[XK_i] && player2.pos[1] <= 10)
+	if (gl.keys[XK_Up] && player2.pos[1] <= 10)
 	{
 		player2.vel[1] += 30;
 	}
 
-	if (gl.keys[XK_l])
+	if (gl.keys[XK_Right])
 	{
 		player2.pos[0] += 10;
 	}
-	if (gl.keys[XK_j])
+	if (gl.keys[XK_Left])
 	{
 		player2.pos[0] -= 10;
 	}
-	if (gl.keys[XK_o] && gl.keyHeldr == 0)
+	if (gl.keys[XK_Shift_R] && gl.keyHeldr == 0)
 	{
 
 		player2.animationState = 1;
 		gl.keyHeldr = 1;
 	}
-	if (!gl.keys[XK_o] && gl.keyHeldr == 1)
+	if (!gl.keys[XK_Shift_R] && gl.keyHeldr == 1)
 	{
 
 		gl.keyHeldr = 0;
 	} 
-	if (gl.keys[XK_p] && gl.keyHeldf == 0)
+	if (gl.keys[XK_Return] && gl.keyHeldf == 0)
 	{
 
 		player2.animationState = 2;
 		gl.keyHeldf = 1;
 	}
-	if (!gl.keys[XK_p] && gl.keyHeldf == 1)
+	if (!gl.keys[XK_Return] && gl.keyHeldf == 1)
 	{
 
 		gl.keyHeldf = 0;

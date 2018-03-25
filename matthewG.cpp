@@ -147,6 +147,7 @@ void spriteRender(double xPos, double yPos, double zPos) {
 	funcTimer(t);
 	}
 }
+
 void spriteRenderRight(double xPos, double yPos, double zPos) {
 	float cx = sp2.xres/8.0;
 	float cy = sp2.yres;
@@ -173,6 +174,7 @@ void spriteRenderRight(double xPos, double yPos, double zPos) {
 	glDisable(GL_ALPHA_TEST);
 	
 }
+
 int spritePunch(int start, int end) {
 
 		if(sp.spriteFrame < start)
@@ -185,6 +187,7 @@ int spritePunch(int start, int end) {
 		return 1;
 		
 }
+
 int spritePunchRight(int startR, int endR) {
 	if(sp2.spriteFrame < startR)
 			sp2.spriteFrame = startR;
