@@ -9,30 +9,6 @@ char t[200];
 extern class Ship s;
 Image play[1] = {"fighterSprite.png"};
 
-class playerSprite {
-	public:
-		int health;
-		int xres, yres;
-		int playerFrame;
-		GLuint playerTex;
-		GLuint playerTexId;;
-		playerSprite() {
-			playerTex =0;
-			playerTexId =0;
-			health = 100;
-			xres = 512;
-			yres = 64;
-			playerFrame = 0;
-
-		}
-
-	private:
-		float _x;
-		float _y;
-		float _width;
-		float _height;
-
-} pl;
 
 unsigned char *buildAlphaData(Image *img)
 {
@@ -237,22 +213,15 @@ int spriteKick() {
 int spriteKickRight() {
 
 
-		if (sp2.spriteFrame >= 16){
+		if (sp2.spriteFrame >= 15){
 			sp2.spriteFrame = 8;
 			return 0;
 		}
-		if(sp2.spriteFrame < 11)
-			sp2.spriteFrame = 11;
+		if(sp2.spriteFrame < 12)
+			sp2.spriteFrame = 12;
 		++sp2.spriteFrame;
 		return 2;
 
 }
 
 
-void takePunch() {
-	pl.health -= 5;
-}
-
-void takeKick() {
-	pl.health -= 10;
-}
