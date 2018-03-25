@@ -38,7 +38,7 @@ class Player {
 	public:
 		Player(int x) {
 			VecZero(dir);
-			pos[0] = x; // Starting point for fighter 1
+			pos[0] = x; // Starting point for fighter
 			pos[1] = 10;
 			pos[2] = 0.0f;
 			VecZero(vel);
@@ -458,8 +458,9 @@ void physics()
 
 void render()
 {
+	glClearColor(0.1, 0.1, 0.1, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	backgroundRender(gl.xres,gl.yres);
+	//backgroundRender(gl.xres,gl.yres);
 
 	//Display player names
 	const char* P1 = "Player 1";

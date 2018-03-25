@@ -5,8 +5,6 @@
 double elapsedTime;
 char t[200];
 
-
-extern class Ship s;
 Image play[1] = {"fighterSprite.png"};
 
 
@@ -62,7 +60,7 @@ class sprite {
 sprite sp2;
 
 void initSprite() {
-	//load the images file into a ppm tructure.
+	//load the images file into a ppm structure.
 	//
 	sp.spTex.spriteImage = &play[0];
 	//create opengl texture elements
@@ -82,7 +80,7 @@ void initSprite() {
 
 }
 void initSprite2() {
-	//load the images file into a ppm tructure.
+	//load the images file into a ppm structure.
 	//
 	sp2.spTex.spriteImage = &play[0];
 	//create opengl texture elements
