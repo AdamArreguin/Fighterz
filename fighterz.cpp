@@ -183,6 +183,7 @@ extern void spriteRender(sprite,double, double, double);
 extern int spritePunch(sprite&,int, int);
 extern int spriteKick(sprite&);
 extern void checkPosition(sprite&, sprite&, double, double);
+extern int Punch1(double, double,double, double, sprite, sprite);
 
 //
 extern void showTimer(int xres, int yres);
@@ -365,21 +366,26 @@ void physics()
 
 	if (gl.keys[XK_d])
 	{
-		if(player.collisionState == false)
+		if(player.collisionState == false || player.pos[1] > player2.pos[1])
 		{
 			player.pos[0] += 10;
 		}
 	}
 	if (gl.keys[XK_a])
 	{
-		if(player.collisionState == false)
+		if(player.collisionState == false || player.pos[1] > player2.pos[1])
 		{
 			player.pos[0] -= 10;
 		}
 	}
 	if (gl.keys[XK_r] && gl.keyHeldr == 0)
 	{
-
+		int Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+							player.sp,player2.sp);
+		if (Punchval == 1 && (player.pos[0] < player2.pos[0]))
+		{
+			player2.pos[0] += 10;
+		}
 		player.animationState = 1;
 		gl.keyHeldr = 1;
 	}
@@ -542,7 +548,8 @@ void render()
 	spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
 	
 	//grabing resources to check collition
-	//player.collisionState = grabResources(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1]);
+	player.collisionState = checkCollision(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+							player.sp,player2.sp);
 
 	//Display healthbars
 	drawHealthBar1(gl.xres, gl.yres);

@@ -109,6 +109,5 @@ class sprite {
 
 
 //external functions
-extern bool checkCollision(double xPos, double yPos, float cx, float cy,
-			double xPos2, double yPos2, float cx2, float cy2);
+extern bool checkCollision(double Xpos1, double yPos1, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2);
 extern bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2);

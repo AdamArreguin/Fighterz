@@ -1,4 +1,4 @@
-//
+//Michael Guzman
 #include "header.h"
 #include "time.h"
 #include <stdio.h>
@@ -68,27 +68,3 @@ glPopMatrix();
 
 
 }
-
-
-/*double testFunc2()
-{
-	static double t = 0.0;
-	struct timespec ftimeStart, ftimeend;
-	clock_gettime(CLOCK_REALTIME, &ftimeStart);
-	int a = 200, b =300, c = 400;
-	for (int i=0; i<10; i++){
-	    b = (a&15) - (b&7) - (c&3);
-	    c = (b&31 - (a&7) - (c&3);
-	}
-	clock_gettime(CLOCK_REALTIME, &ftimeEnd);
-	t += timeDiff(&ftimeStart. &ftimeEnd);
-	return t;
-	}
-
-
-
-
-
-
-*/
-
