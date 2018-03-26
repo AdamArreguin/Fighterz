@@ -340,6 +340,14 @@ void physics()
 	{
 		player.vel[1] -= gl.gravity;
 	}
+	if(player2.vel[0] > 0)
+	{
+		player2.vel[0] -= 0.3;
+	}
+	if(player2.vel[0] < 0)
+	{
+		player2.vel[0] = 0;
+	}
 
 	//Check for collision with window edges
 	if (player.pos[0] < 15) {
@@ -385,7 +393,7 @@ void physics()
 							player.sp,player2.sp);
 		if (Punchval == 1 && (player.pos[0] < player2.pos[0]))
 		{
-			player2.pos[0] += 10;
+			player2.vel[0] += 10;
 		}
 		player.animationState = 1;
 		gl.keyHeldr = 1;

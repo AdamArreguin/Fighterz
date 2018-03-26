@@ -69,6 +69,22 @@ void drawHealthBar2(int x, int y)
 
 int Punch1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2)
 {
-	
-	return 1;
+	float cx = pSprite1.xres/8.0;
+	float cy = pSprite1.yres;
+
+	double extxPos = xPos + 5;
+	double pRight = extxPos + cx/3.5;
+	double pLeft = extxPos - cx/3.5;
+
+	double pRight2 = xPos2 + cx/3.5;
+	double pLeft2 = xPos2 - cx/3.5;
+
+	if((pRight > pLeft2 && pLeft < pLeft2) || (pLeft < pRight2 && pRight > pRight2))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
 }
