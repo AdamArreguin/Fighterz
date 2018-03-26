@@ -35,6 +35,7 @@ class Player {
 		Vec vel;
 		float color[3];
 		int animationState;
+		bool collisionState;
 	public:
 		Player(int x) {
 			VecZero(dir);
@@ -44,6 +45,7 @@ class Player {
 			VecZero(vel);
 			color[0] = color[1] = color[2] = 1.0;
 			animationState = 0;
+			collisionState = false;
 			
 
 		}
@@ -363,11 +365,17 @@ void physics()
 
 	if (gl.keys[XK_d])
 	{
-		player.pos[0] += 10;
+		if(player.collisionState == false)
+		{
+			player.pos[0] += 10;
+		}
 	}
 	if (gl.keys[XK_a])
 	{
-		player.pos[0] -= 10;
+		if(player.collisionState == false)
+		{
+			player.pos[0] -= 10;
+		}
 	}
 	if (gl.keys[XK_r] && gl.keyHeldr == 0)
 	{
@@ -454,6 +462,16 @@ void physics()
 
 		gl.keyHeldf = 0;
 	} 
+
+	//nudge player if colliding
+	if(player.collisionState == true && (player.pos[0] < player2.pos[0]))
+	{
+		player.pos[0] -= 1;
+	}
+	else if (player.collisionState == true && (player.pos[0] > player2.pos[0]))
+	{
+		player.pos[0] += 1;
+	}
 }
 
 void render()
@@ -507,6 +525,10 @@ void render()
 	}
 	spriteRender(player.pos[0], player.pos[1], player.pos[2]);
 	spriteRenderRight(player2.pos[0], player2.pos[1], player2.pos[2]);
+	
+	//grabing resources to check collition
+	player.collisionState = grabResources(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1]);
+
 	//Display healthbars
 	drawHealthBar1(gl.xres, gl.yres);
 	drawHealthBar2(gl.xres, gl.yres);

@@ -149,6 +149,16 @@ void spriteRender(double xPos, double yPos, double zPos) {
 	}
 }
 
+bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2)
+{
+	float cx = sp.xres/8.0;
+	float cy = sp.yres;
+	float cx2 = sp2.xres/8.0;
+	float cy2 = sp2.yres;
+
+	return checkCollision(xPos1,yPos1,cx,cy,xPos2,yPos2,cx2,cy2);
+}
+
 void spriteRenderRight(double xPos, double yPos, double zPos) {
 	float cx = sp2.xres/8.0;
 	float cy = sp2.yres;

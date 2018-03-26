@@ -6,6 +6,8 @@
 Image img[1] = {"seamless_back.jpg"};
 Image img2[1] = {"opt2_back.jpg"};
 
+using namespace std;
+
 class Texture {
 	public:
 		Image *backImage;
@@ -22,6 +24,25 @@ class background {
 		//	xres= s->width, yres= s->height;
 		}
 } b;
+
+bool checkCollision(double xPos, double yPos, float cx, float cy, double xPos2, double yPos2, float cx2, float cy2)
+{
+	double pRight = xPos + cx/2;
+	double pLeft = xPos - cx/2;
+
+	double pRight2 = xPos2 + cx2/2;
+	double pLeft2 = xPos2 - cx/2;
+
+	if(pRight > pLeft2 && pLeft < pLeft2)
+	{
+		cout << "testing collision" << endl;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
 void backGl()
 {

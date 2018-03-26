@@ -90,4 +90,6 @@ public:
 
 
 //external functions
-
+extern bool checkCollision(double xPos, double yPos, float cx, float cy,
+			double xPos2, double yPos2, float cx2, float cy2);
+extern bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2);
