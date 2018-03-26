@@ -182,6 +182,7 @@ extern void spriteRender(sprite,double, double, double);
 //extern void spriteRenderRight(double, double, double);
 extern int spritePunch(sprite&,int, int);
 extern int spriteKick(sprite&);
+extern int Punch1(double, double,double, double, sprite, sprite);
 //extern int spritePunchRight(int, int);
 //extern int spriteKickRight();
 
@@ -366,21 +367,26 @@ void physics()
 
 	if (gl.keys[XK_d])
 	{
-		if(player.collisionState == false)
+		if(player.collisionState == false || player.pos[1] > player2.pos[1])
 		{
 			player.pos[0] += 10;
 		}
 	}
 	if (gl.keys[XK_a])
 	{
-		if(player.collisionState == false)
+		if(player.collisionState == false || player.pos[1] > player2.pos[1])
 		{
 			player.pos[0] -= 10;
 		}
 	}
 	if (gl.keys[XK_r] && gl.keyHeldr == 0)
 	{
-
+		int Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+							player.sp,player2.sp);
+		if (Punchval == 1 && (player.pos[0] < player2.pos[0]))
+		{
+			player2.pos[0] += 10;
+		}
 		player.animationState = 1;
 		gl.keyHeldr = 1;
 	}
