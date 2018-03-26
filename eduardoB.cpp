@@ -25,12 +25,15 @@ class background {
 		}
 } b;
 
-bool checkCollision(double xPos, double yPos, float cx, float cy, double xPos2, double yPos2, float cx2, float cy2)
+bool checkCollision(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2)
 {
+	float cx = pSprite1.xres/8.0;
+	float cy = pSprite1.yres;
+
 	double pRight = xPos + cx/2;
 	double pLeft = xPos - cx/2;
 
-	double pRight2 = xPos2 + cx2/2;
+	double pRight2 = xPos2 + cx/2;
 	double pLeft2 = xPos2 - cx/2;
 
 	if(pRight > pLeft2 && pLeft < pLeft2)

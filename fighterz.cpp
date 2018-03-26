@@ -528,7 +528,8 @@ void render()
 	spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
 	
 	//grabing resources to check collition
-	//player.collisionState = grabResources(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1]);
+	player.collisionState = checkCollision(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+							player.sp,player2.sp);
 
 	//Display healthbars
 	drawHealthBar1(gl.xres, gl.yres);
