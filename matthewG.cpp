@@ -4,7 +4,6 @@
 #include "header.h"
 double elapsedTime;
 char t[200];
-
 Image play[1] = {"fighterSprite.png"};
 
 unsigned char *buildAlphaData(Image *img)
@@ -73,6 +72,7 @@ void funcTimer(const char *t) {
 	ggprint16(&r, 8, 0x00ffff00, t);
 }
 
+
 void spriteRender(sprite sp,double xPos, double yPos, double zPos) {
 	clock_t timer;
 	timer = clock();
@@ -135,7 +135,7 @@ int spritePunch(sprite &sp, int start, int end) {
 int spriteKick(sprite &sp) {
 
 
-		if (sp.spriteFrame >= 7){
+		if (sp.spriteFrame >= 8){
 			sp.spriteFrame = 0;
 			return 0;
 		}
@@ -146,4 +146,18 @@ int spriteKick(sprite &sp) {
 
 }
 
+void checkPosition(sprite &p1, sprite &p2,double xPos1, double xPos2) {
+	double centerP1 = xPos1;
+
+	double centerP2 = xPos2;
+
+	if(centerP1 > centerP2) {
+		p1.spriteFrame = 8;
+		p2.spriteFrame = 0;
+	}
+	else if (centerP2 > centerP1) {
+		p1.spriteFrame = 0;
+		p2.spriteFrame = 8;
+	} 
+}
 
