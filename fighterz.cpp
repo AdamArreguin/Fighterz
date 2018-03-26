@@ -172,6 +172,7 @@ void render();
 //extern prototypes
 extern void backGl();
 extern void backgroundRender(int xres, int yres);
+extern void backgroundRenderTimer(int xres, int yres);
 extern void displayName(const char*, int, int);
 extern void displayScore(const char*, int,int);
 extern void displayScoreOpt(const char*, int, int);
@@ -479,7 +480,10 @@ void render()
 {
 	glClearColor(0.1, 0.1, 0.1, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	//backgroundRender(gl.xres,gl.yres);
+	if(PROFILING_ON != 0)
+		backgroundRenderTimer(gl.xres,gl.yres);
+	else
+		backgroundRender(gl.xres,gl.yres);
 
 	//Display player names
 	const char* P1 = "Player 1";

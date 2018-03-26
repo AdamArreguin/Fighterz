@@ -27,13 +27,15 @@ class background {
 
 bool checkCollision(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2)
 {
+	
 	float cx = pSprite1.xres/8.0;
-	float cy = pSprite1.yres;
-
+	//float cy = pSprite1.yres;
+	//grab right side of bounding box
 	double pRight = xPos + cx/2;
+	//grab left side of bounding box
 	double pLeft = xPos - cx/2;
 
-	double pRight2 = xPos2 + cx/2;
+	//double pRight2 = xPos2 + cx/2;
 	double pLeft2 = xPos2 - cx/2;
 
 	if(pRight > pLeft2 && pLeft < pLeft2)
@@ -78,6 +80,18 @@ void displayTime(int xres, int yres, const char *s)
 
 void backgroundRender(int xres, int yres)
 {
+    glColor3f(1.0f,1.0f,1.0f);
+    glBindTexture(GL_TEXTURE_2D, b.tex.backTexture);
+    glBegin(GL_QUADS);
+        glTexCoord2f(b.tex.xc[0], b.tex.yc[1]); glVertex2i(0, 0);
+        glTexCoord2f(b.tex.xc[0], b.tex.yc[0]); glVertex2i(0, yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[0]); glVertex2i(xres, yres);
+        glTexCoord2f(b.tex.xc[1], b.tex.yc[1]); glVertex2i(xres, 0);
+    glEnd();
+}
+
+void backgroundRenderTimer(int xres, int yres)
+{
 
     clock_t timer;
     char s[100];
@@ -118,8 +132,6 @@ void backgroundRender(int xres, int yres)
 
     //////////////////////////////////////////////////////////
 
-    if(PROFILING_ON != 0)
-    {
     clock_t timer2;
     char s2[100];
     float diff2;
@@ -155,5 +167,4 @@ void backgroundRender(int xres, int yres)
 
     sprintf(s2, "optimized Elapsed_Time: %f", (elapsedTime2/CLOCKS_PER_SEC));
     displayTime(xres,yres - 120,s2);
-    }
 }
