@@ -7,7 +7,6 @@ char t[200];
 
 Image play[1] = {"fighterSprite.png"};
 
-
 unsigned char *buildAlphaData(Image *img)
 {
 	//add 4th component to RGB stream...
@@ -38,31 +37,10 @@ unsigned char *buildAlphaData(Image *img)
 	return newdata;
 }
 
-class SpriteTexture {
-	public:
-		Image *spriteImage;
-		GLuint spriteTexture;
-		
-		float xc[2];
-		float yc[2];
-};
-
-class sprite {
-	public:
-		int xres, yres;
-		SpriteTexture spTex;
-		int spriteFrame;
-		sprite(int sFrame) {
-			xres= 1024, yres= 64;
-			spriteFrame=sFrame;
-		}
-} sp(0);
-sprite sp2(8);
-
 //TODO remove duplicate functions and call sprite class from main.
 //TODO change player direction based on other players position 
 
-void initSprite() {
+void initSprite(sprite &sp) {
 	//load the images file into a ppm structure.
 	//
 	sp.spTex.spriteImage = &play[0];
@@ -82,26 +60,6 @@ void initSprite() {
 	sp.spTex.yc[1] = 1.0;
 
 }
-void initSprite2() {
-	//load the images file into a ppm structure.
-	//
-	sp2.spTex.spriteImage = &play[0];
-	//create opengl texture elements
-	glGenTextures(1, &sp2.spTex.spriteTexture);
-	int w2 = sp2.spTex.spriteImage->width;
-	int h2 = sp2.spTex.spriteImage->height;
-	glBindTexture(GL_TEXTURE_2D, sp2.spTex.spriteTexture);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	unsigned char *spriteData = buildAlphaData(&play[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w2, h2, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
-	sp2.spTex.xc[0] = 0.0;
-	sp2.spTex.xc[1] = 0.125;
-	sp2.spTex.yc[0] = 0.0;
-	sp2.spTex.yc[1] = 1.0;
-
-}
 
 void funcTimer(const char *t) {
 
@@ -115,7 +73,7 @@ void funcTimer(const char *t) {
 	ggprint16(&r, 8, 0x00ffff00, t);
 }
 
-void spriteRender(double xPos, double yPos, double zPos) {
+void spriteRender(sprite sp,double xPos, double yPos, double zPos) {
 	clock_t timer;
 	timer = clock();
 	float cx = sp.xres/8.0;
@@ -148,45 +106,20 @@ void spriteRender(double xPos, double yPos, double zPos) {
 	funcTimer(t);
 	}
 }
-
+/*
 bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2)
-{
+{ 
 	float cx = sp.xres/8.0;
 	float cy = sp.yres;
 	float cx2 = sp2.xres/8.0;
 	float cy2 = sp2.yres;
 
 	return checkCollision(xPos1,yPos1,cx,cy,xPos2,yPos2,cx2,cy2);
-}
-
-void spriteRenderRight(double xPos, double yPos, double zPos) {
-	float cx = sp2.xres/8.0;
-	float cy = sp2.yres;
-	glPushMatrix();
-    glColor3f(1.0,1.0,1.0);
-    glBindTexture(GL_TEXTURE_2D, sp2.spTex.spriteTexture);
-    glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-	glColor4ub(255,255,255,255);
-	int ix = sp2.spriteFrame % 16;
-	int iy = 0;
-		
-	float tx = (float)ix / 16.0;
-	float ty = (float)iy;
-	glTranslatef(xPos, yPos, zPos);
-    glBegin(GL_QUADS);
-        glTexCoord2f(tx, ty+1.0); glVertex2i(0, 0);
-        glTexCoord2f(tx, ty); glVertex2i(0, cy+96);
-        glTexCoord2f(tx+0.0625, ty); glVertex2i(cx, cy+96);
-        glTexCoord2f(tx+0.0625, ty+1.0); glVertex2i(cx, 0);
-    glEnd();
-    glPopMatrix();
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_ALPHA_TEST);
 	
 }
+*/
 
-int spritePunch(int start, int end) {
+int spritePunch(sprite &sp, int start, int end) {
 
 		if(sp.spriteFrame < start)
 			sp.spriteFrame = start;
@@ -199,18 +132,7 @@ int spritePunch(int start, int end) {
 		
 }
 
-int spritePunchRight(int startR, int endR) {
-	if(sp2.spriteFrame < startR)
-			sp2.spriteFrame = startR;
-		if (sp2.spriteFrame > endR){
-			sp2.spriteFrame = startR;
-			return 0;
-		}
-		++sp2.spriteFrame;
-		return 1;
-}
-
-int spriteKick() {
+int spriteKick(sprite &sp) {
 
 
 		if (sp.spriteFrame >= 7){
@@ -220,20 +142,6 @@ int spriteKick() {
 		if(sp.spriteFrame < 3)
 			sp.spriteFrame = 3;
 		++sp.spriteFrame;
-		return 2;
-
-}
-
-int spriteKickRight() {
-
-
-		if (sp2.spriteFrame >= 15){
-			sp2.spriteFrame = 8;
-			return 0;
-		}
-		if(sp2.spriteFrame < 12)
-			sp2.spriteFrame = 12;
-		++sp2.spriteFrame;
 		return 2;
 
 }

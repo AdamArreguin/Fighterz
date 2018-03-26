@@ -28,27 +28,28 @@ class Global {
 		}
 } gl;
 
-class Player {
-	public:
-		Vec dir;
-		Vec pos;
-		Vec vel;
-		float color[3];
-		int animationState;
-		bool collisionState;
-	public:
-		Player(int x) {
-			VecZero(dir);
-			pos[0] = x; // Starting point for fighter
-			pos[1] = 10;
-			pos[2] = 0.0f;
-			VecZero(vel);
-			color[0] = color[1] = color[2] = 1.0;
-			animationState = 0;
-			collisionState = false;
-			
 
-		}
+class Player {
+    public:
+        sprite sp;
+        Vec dir;
+        Vec pos;
+        Vec vel;
+        float color[3];
+        int animationState;
+        bool collisionState;
+    public:
+        Player(int x) {
+            VecZero(dir);
+            pos[0] = x; // Starting point for fighter
+            pos[1] = 10;
+            pos[2] = 0.0f;
+            VecZero(vel);
+            color[0] = color[1] = color[2] = 1.0;
+            animationState = 0;
+            collisionState = false;
+
+        }
 };
 
 Player player(200);
@@ -175,14 +176,14 @@ extern void displayName(const char*, int, int);
 extern void displayScore(const char*, int,int);
 extern void displayScoreOpt(const char*, int, int);
 extern void controls (int, int, const char*);
-extern void initSprite();
-extern void initSprite2();
-extern void spriteRender(double, double, double);
-extern void spriteRenderRight(double, double, double);
-extern int spritePunch(int, int);
-extern int spriteKick();
-extern int spritePunchRight(int, int);
-extern int spriteKickRight();
+extern void initSprite(sprite&);
+//extern void initSprite2();
+extern void spriteRender(sprite,double, double, double);
+//extern void spriteRenderRight(double, double, double);
+extern int spritePunch(sprite&,int, int);
+extern int spriteKick(sprite&);
+//extern int spritePunchRight(int, int);
+//extern int spriteKickRight();
 
 //
 extern void showTimer(int xres, int yres);
@@ -231,8 +232,8 @@ int main()
 void init_opengl()
 {
 	backGl();
-	initSprite();
-	initSprite2();
+	initSprite(player.sp);
+	initSprite(player2.sp);
 	//OpenGL initialization
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
@@ -507,27 +508,27 @@ void render()
 	*/
 	if (player.animationState == 1){
 		// return player.animation state back to 0 after spritePunch();
-		player.animationState = spritePunch(0,3); 
+		player.animationState = spritePunch(player.sp,0,3); 
 	}
 	if (player2.animationState == 1){
 		// return player.animation state back to 0 after spritePunch(); 
-		player2.animationState = spritePunchRight(8,11); 
+		player2.animationState = spritePunch(player2.sp,8,11); 
 
 	}
 
 	if (player.animationState == 2){
 		// return player.animation state back to 0 after spriteKick();
-		player.animationState = spriteKick();
+		player.animationState = spriteKick(player.sp);
 	}
 	if (player2.animationState == 2){
 		// return player.animation state back to 0 after spriteKick();
-		player2.animationState = spriteKickRight();
+		player2.animationState = spriteKick(player2.sp);
 	}
-	spriteRender(player.pos[0], player.pos[1], player.pos[2]);
-	spriteRenderRight(player2.pos[0], player2.pos[1], player2.pos[2]);
+	spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
+	spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
 	
 	//grabing resources to check collition
-	player.collisionState = grabResources(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1]);
+	//player.collisionState = grabResources(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1]);
 
 	//Display healthbars
 	drawHealthBar1(gl.xres, gl.yres);

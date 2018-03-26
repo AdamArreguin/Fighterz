@@ -40,8 +40,6 @@ const float TIMESLICE = 1.0f;
 #define ALPHA 1
 const int MAX_BULLETS = 11;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
-
-
 //image
 class Image {
 public:
@@ -86,6 +84,27 @@ public:
         }
         unlink(ppmname);
     }
+};
+
+
+class SpriteTexture {
+    public:
+        Image *spriteImage;
+        GLuint spriteTexture;
+        
+        float xc[2];
+        float yc[2];
+};
+
+class sprite {
+    public:
+        int xres, yres;
+        SpriteTexture spTex;
+        int spriteFrame;
+        sprite() {
+            xres= 1024, yres= 64;
+            spriteFrame=0;
+        }
 };
 
 
