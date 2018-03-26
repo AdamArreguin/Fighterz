@@ -38,8 +38,9 @@ class Player {
         float color[3];
         int animationState;
         bool collisionState;
+        int positionState;
     public:
-        Player(int x) {
+        Player(int x, int posState) {
             VecZero(dir);
             pos[0] = x; // Starting point for fighter
             pos[1] = 10;
@@ -48,12 +49,13 @@ class Player {
             color[0] = color[1] = color[2] = 1.0;
             animationState = 0;
             collisionState = false;
+            positionState = posState;
 
         }
 };
 
-Player player(200);
-Player player2(800);
+Player player(200, 1);
+Player player2(800, 2);
 //X Windows variables
 class X11_wrapper {
     private:
@@ -177,13 +179,10 @@ extern void displayScore(const char*, int,int);
 extern void displayScoreOpt(const char*, int, int);
 extern void controls (int, int, const char*);
 extern void initSprite(sprite&);
-//extern void initSprite2();
 extern void spriteRender(sprite,double, double, double);
-//extern void spriteRenderRight(double, double, double);
 extern int spritePunch(sprite&,int, int);
 extern int spriteKick(sprite&);
-//extern int spritePunchRight(int, int);
-//extern int spriteKickRight();
+extern void checkPosition(sprite&, sprite&, double, double);
 
 //
 extern void showTimer(int xres, int yres);
@@ -506,21 +505,36 @@ void render()
 	controls(83, 770, RIGHT);
 	controls(60, 820, JUMP);
 	*/
-	if (player.animationState == 1){
+
+
+	checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0]);
+
+	if (player.animationState == 1) {
+		if(player.positionState == 1) {
 		// return player.animation state back to 0 after spritePunch();
-		player.animationState = spritePunch(player.sp,0,3); 
+		player.animationState = spritePunch(player.sp,0,3);
+		}
+		else if( player.positionState == 2) {
+			player.animationState = spritePunch(player.sp, 8,11);
+		} 
 	}
-	if (player2.animationState == 1){
+
+	if (player2.animationState == 1) {
+		if (player2.positionState == 2) {
 		// return player.animation state back to 0 after spritePunch(); 
-		player2.animationState = spritePunch(player2.sp,8,11); 
+		player2.animationState = spritePunch(player2.sp,8,11);
+		}
+		else if (player2.positionState == 1) {
+			player2.animationState = spritePunch(player2.sp,0,3);
+		} 
 
 	}
 
-	if (player.animationState == 2){
+	if (player.animationState == 2) {
 		// return player.animation state back to 0 after spriteKick();
 		player.animationState = spriteKick(player.sp);
 	}
-	if (player2.animationState == 2){
+	if (player2.animationState == 2) {
 		// return player.animation state back to 0 after spriteKick();
 		player2.animationState = spriteKick(player2.sp);
 	}
