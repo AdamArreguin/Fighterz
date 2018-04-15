@@ -134,36 +134,42 @@ int spritePunch(sprite &sp, int start, int end) {
 		
 }
 
-int spriteKick(sprite &sp) {
+int spriteKick(sprite &sp, int start, int end) {
+	cout << "start: "<< start <<endl;
 	cout << "kick: "<<sp.spriteFrame << endl;
-
-		if (sp.spriteFrame >= 7){
-			sp.spriteFrame = 0;
+	cout << "end: " << end << endl;
+		if (sp.spriteFrame < start)
+			sp.spriteFrame = start;
+		else if (sp.spriteFrame >= end){
+			sp.spriteFrame = start;
 			return 0;
 		}
-		if(sp.spriteFrame < 3)
-			sp.spriteFrame = 3;
 		++sp.spriteFrame;
 		return 2;
 
 }
 
-int checkPosition(sprite &p1, sprite &p2,double xPos1, double xPos2, int &posFlag) {
+int checkPosition(sprite &p1, sprite &p2,double xPos1, double xPos2, int &posFlag, int &pos1, int &pos2) {
 	double centerP1 = xPos1;
 
 	double centerP2 = xPos2;
 
-	if(centerP1 > centerP2 && posFlag == 2) {
+	if(centerP1 > centerP2 && posFlag == 1) {
 		p1.spriteFrame = 8;
 		p2.spriteFrame = 0;
-		posFlag = 1;
-		return 1;
+		posFlag = 2;
+		pos1 = 2;
+		pos2 = 1;
+		cout << "posFlag: " << posFlag << " pos1: " << pos1 << endl;
+		return 2;
 	}
-	else if (centerP2 > centerP1 && posFlag == 1) {
+	else if (centerP2 > centerP1 && posFlag == 2) {
 		p1.spriteFrame = 0;
 		p2.spriteFrame = 8;
-		posFlag = 2;
-		return 2;
+		posFlag = 1;
+		pos1 = 1;
+		pos2 = 2;
+		return 1;
 	} 
 	return 0;
 }

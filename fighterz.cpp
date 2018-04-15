@@ -18,6 +18,7 @@ class Global {
 		int keyHeldr;
 		int keyHeldf;
 		char keys[65536];
+		int posFlag;
 		Global(){
 			xres = 1280;
 			yres = 720;
@@ -25,6 +26,7 @@ class Global {
 			memset(keys, 0, 65536);
 			keyHeldr = 0;
 			keyHeldf = 0;
+			posFlag = 1;
 		}
 } gl;
 
@@ -181,9 +183,9 @@ extern void displayScoreOpt(const char*, int, int);
 extern void controls (int, int, const char*);
 extern void initSprite(sprite&);
 extern void spriteRender(sprite,double, double, double);
-extern int spritePunch(sprite&,int, int);
-extern int spriteKick(sprite&);
-extern void checkPosition(sprite&, sprite&, double, double);
+extern int spritePunch(sprite&, int, int);
+extern int spriteKick(sprite&, int, int);
+extern void checkPosition(sprite&, sprite&, double, double, int&, int&, int&);
 extern int Punch1(double, double,double, double, sprite, sprite);
 
 //
@@ -525,8 +527,7 @@ void render()
 	*/
 
 
-	checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0]);
-
+	checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0], gl.posFlag, player.positionState, player2.positionState);
 	if (player.animationState == 1) {
 		if(player.positionState == 1) {
 		// return player.animation state back to 0 after spritePunch();
@@ -548,13 +549,21 @@ void render()
 
 	}
 
-	if (player.animationState == 2) {
+	else if (player.animationState == 2) {
 		// return player.animation state back to 0 after spriteKick();
-		player.animationState = spriteKick(player.sp);
+		if(player.positionState == 1)
+		player.animationState = spriteKick(player.sp, 4, 7);
+	else if( player.positionState == 2) {
+			player.animationState = spriteKick(player.sp, 12,15);
+		} 
 	}
 	if (player2.animationState == 2) {
 		// return player.animation state back to 0 after spriteKick();
-		player2.animationState = spriteKick(player2.sp);
+		if (player2.positionState == 2)
+		player2.animationState = spriteKick(player2.sp,12,15);
+	else if (player2.positionState == 1) {
+			player2.animationState = spriteKick(player2.sp,4,7);
+		} 
 	}
 	spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
 	spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
