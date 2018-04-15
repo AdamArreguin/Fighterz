@@ -11,7 +11,7 @@
 //#include <ctime>
 //#include <time.h>
 
-void sleep();
+//void sleep();
 // Display name of characters
 void displayName (const char* s, int yres, int i)
 {
@@ -29,12 +29,36 @@ void displayName (const char* s, int yres, int i)
     ggprint16(&r, 32, 0x00ffffff, s);
 }
 
-void controls (int x, int y, const char *s)
+void displayText(int x, int y, const char* s)
 {
     Rect r;
-    r.left = x;
     r.bot = y;
-    ggprint16(&r, 32, 0x00ffffff, s);
+    r.left = x;
+    ggprint16(&r, 16, 0x00ffffff, s);
+}
+
+void showControls(int x, int y, int i)
+{
+    switch (i) {
+        case 1:
+            displayText(x, y-100, "PLAYER 1");
+            displayText(x, y-125, "-------------");
+            displayText(x, y-150, "JUMP: W");
+            displayText(x, y-175, "LEFT: A");
+            displayText(x, y-200, "RIGHT: D");
+            displayText(x, y-225, "PUNCH: R");
+            displayText(x, y-250, "KICK: F");
+            break;
+        case 2:
+            displayText(x, y-100, "PLAYER 2");
+            displayText(x, y-125, "-------------");
+            displayText(x, y-150, "JUMP: W");
+            displayText(x, y-175, "LEFT: A");
+            displayText(x, y-200, "RIGHT: D");
+            displayText(x, y-225, "PUNCH: R");
+            displayText(x, y-250, "KICK: F");
+            break;
+    }
 }
 
 void healthBarOverlay(int x, int y) 
@@ -173,18 +197,114 @@ void countdown(int x, int y)
     }  
 }
 
-//============GORDON'S EXAMPLE=================
-//
-//double testFunc2(){
-//static double t = 0.0;
-//struct timespec ftimeStart, ftimeEnd;
-//clock_gettime(CLOCK_REALLTIME, &ftimeStart);
-//int a = 200, b = 300, c = 400;
-//for (int i=0; i<10; i++) {
-//	b = (a&15) - (b&7) - (C&3);
-//	c = (b&31) - (a&7) - (c&3);
-//}
-//clock_gettime(CLOCK_REALTIME, &ftimeEnd);
-//t += timeDiff(&ftimeStart, &ftimeEnd);
-//return t;
-//}
+void drawMenu(int x, int y)
+{
+    glClearColor(.1,.1,.6,1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glPushMatrix();
+    glTranslatef(x*0.5, y*0.5,1.0f);
+    //glRectf(-125,50,125,-50);
+    glBegin(GL_QUADS);
+        glColor3ub(75,75,75);
+        glVertex2f(-150,30);
+        glColor3ub(100,100,100);
+        glVertex2f(150,30);
+        glColor3ub(75,75,75);
+        glVertex2f(150,-30);
+        glColor3ub(100,100,100);
+        glVertex2f(-150,-30);
+    glEnd();
+    glPopMatrix();
+    
+    Rect r;
+    r.bot = y*0.5-13;
+    r.left = x*0.5;
+    r.center = 1;
+    ggprint16(&r, 32, 0x00ffffff, "PLAY");
+
+    glPushMatrix();
+    glTranslatef(x*.5, y*.5, 1.0f);
+    glLineWidth(20);
+    glBegin(GL_LINE_LOOP);
+        glColor3ub(185,185,185);
+        glVertex2f(-150,30);
+        glColor3ub(50,50,50);
+        glVertex2f(150,30);
+        glColor3ub(185,185,185);
+        glVertex2f(150, -30);
+        glColor3ub(50,50,50);
+        glVertex2f(-150,-30);
+    glEnd();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(x*0.5,y*0.32,1.0f);
+    glBegin(GL_QUADS);
+        glColor3ub(100,100,100);
+        glVertex2f(-150,30);
+        glColor3ub(75,75,75);
+        glVertex2f(150,30);
+        glColor3ub(100,100,100);
+        glVertex2f(150,-30);
+        glColor3ub(75,75,75);
+        glVertex2f(-150,-30);
+    glEnd();
+    glPopMatrix();
+
+    //Rect r;
+    r.bot = y*0.32-13;
+    r.left = x*0.5;
+    r.center = 1;
+    ggprint16(&r, 32, 0x00ffffff, "CONTROLS");
+
+    glPushMatrix();
+    glTranslatef(x*.5, y*.32, 1.0f);
+    glLineWidth(20);
+    glBegin(GL_LINE_LOOP);
+        glColor3ub(185,185,185);
+        glVertex2f(-150,30);
+        glColor3ub(50,50,50);
+        glVertex2f(150,30);
+        glColor3ub(185,185,185);
+        glVertex2f(150, -30);
+        glColor3ub(50,50,50);
+        glVertex2f(-150,-30);
+    glEnd();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(x*0.5,y*0.14,1.0f);
+    glBegin(GL_QUADS);
+        glColor3ub(100,100,100);
+        glVertex2f(-150,30);
+        glColor3ub(75,75,75);
+        glVertex2f(150,30);
+        glColor3ub(100,100,100);
+        glVertex2f(150,-30);
+        glColor3ub(75,75,75);
+        glVertex2f(-150,-30);
+    glEnd();
+    glPopMatrix();
+    
+    r.bot = y*0.14-13;
+    r.left = x*0.5;
+    r.center = 1;
+    ggprint16(&r, 32, 0x00ffffff, "CREDITS");
+
+    glPushMatrix();
+    glTranslatef(x*.5, y*.14, 1.0f);
+    glLineWidth(20);
+    glBegin(GL_LINE_LOOP);
+        glColor3ub(185,185,185);
+        glVertex2f(-150,30);
+        glColor3ub(50,50,50);
+        glVertex2f(150,30);
+        glColor3ub(185,185,185);
+        glVertex2f(150, -30);
+        glColor3ub(50,50,50);
+        glVertex2f(-150,-30);
+    glEnd();
+    glPopMatrix();
+}
+
+
