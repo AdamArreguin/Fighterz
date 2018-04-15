@@ -6,8 +6,8 @@ double elapsedTime;
 char t[200];
 Image play[1] = {"fighterSprite.png"};
 
-unsigned char *buildAlphaData(Image *img)
-{
+
+unsigned char *buildAlphaData(Image *img){
 	//add 4th component to RGB stream...
 	int i;
 	unsigned char *newdata, *ptr;
@@ -120,10 +120,12 @@ bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2)
 */
 
 int spritePunch(sprite &sp, int start, int end) {
-
+	cout << "start: "<< start <<endl;
+	cout << "punch: "<<sp.spriteFrame << endl;
+	cout << "end: " << end << endl;
 		if(sp.spriteFrame < start)
 			sp.spriteFrame = start;
-		if (sp.spriteFrame > end){
+		else if (sp.spriteFrame >= end){
 			sp.spriteFrame = start;
 			return 0;
 		}
@@ -133,9 +135,9 @@ int spritePunch(sprite &sp, int start, int end) {
 }
 
 int spriteKick(sprite &sp) {
+	cout << "kick: "<<sp.spriteFrame << endl;
 
-
-		if (sp.spriteFrame >= 8){
+		if (sp.spriteFrame >= 7){
 			sp.spriteFrame = 0;
 			return 0;
 		}
@@ -146,18 +148,23 @@ int spriteKick(sprite &sp) {
 
 }
 
-void checkPosition(sprite &p1, sprite &p2,double xPos1, double xPos2) {
+int checkPosition(sprite &p1, sprite &p2,double xPos1, double xPos2, int &posFlag) {
 	double centerP1 = xPos1;
 
 	double centerP2 = xPos2;
 
-	if(centerP1 > centerP2) {
+	if(centerP1 > centerP2 && posFlag == 2) {
 		p1.spriteFrame = 8;
 		p2.spriteFrame = 0;
+		posFlag = 1;
+		return 1;
 	}
-	else if (centerP2 > centerP1) {
+	else if (centerP2 > centerP1 && posFlag == 1) {
 		p1.spriteFrame = 0;
 		p2.spriteFrame = 8;
+		posFlag = 2;
+		return 2;
 	} 
+	return 0;
 }
 
