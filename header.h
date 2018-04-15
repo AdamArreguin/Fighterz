@@ -40,8 +40,6 @@ const float TIMESLICE = 1.0f;
 #define ALPHA 1
 const int MAX_BULLETS = 11;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
-
-
 //image
 class Image {
 public:
@@ -89,5 +87,27 @@ public:
 };
 
 
-//external functions
+class SpriteTexture {
+    public:
+        Image *spriteImage;
+        GLuint spriteTexture;
+        
+        float xc[2];
+        float yc[2];
+};
 
+class sprite {
+    public:
+        int xres, yres;
+        SpriteTexture spTex;
+        int spriteFrame;
+        sprite() {
+            xres= 1024, yres= 64;
+            spriteFrame=0;
+        }
+};
+
+
+//external functions
+extern bool checkCollision(double Xpos1, double yPos1, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2);
+extern bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2);
