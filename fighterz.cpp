@@ -415,7 +415,8 @@ void physics()
 	{
 
 		gl.keyHeldf = 0;
-	} 
+	}
+
 	player2.pos[0] += player2.vel[0];
 	player2.pos[1] += player2.vel[1];
 
@@ -451,11 +452,35 @@ void physics()
 
 	if (gl.keys[XK_Right])
 	{
-		player2.pos[0] += 10;
+		//player2.pos[0] += 10;
+		//float checkPosX = player2.pos[0] + 10;
+		//if((!checkCollision(checkPosX,player2.pos[1],player.pos[0],player.pos[1],
+		//					player2.sp,player.sp)) ||
+		//	player2.pos[1] > player.pos[1])
+		//{
+		//	player2.pos[0] += 10;
+		//}
+
+
+		if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+		{
+			player2.pos[0] += 10;
+		}
 	}
 	if (gl.keys[XK_Left])
 	{
-		player2.pos[0] -= 10;
+		//float checkPosX = player2.pos[0] - 10;
+		//if((!checkCollision(checkPosX,player2.pos[1],player.pos[0],player.pos[1],
+		//					player2.sp,player.sp)) ||
+		//	player2.pos[1] > player.pos[1])
+		//{
+			//player2.pos[0] -= 10;
+		//}
+		
+		if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+		{
+			player2.pos[0] -= 10;
+		}
 	}
 	if (gl.keys[XK_Shift_R] && gl.keyHeldr == 0)
 	{
@@ -489,6 +514,15 @@ void physics()
 	{
 		player.pos[0] += 1;
 	}
+
+	if(player2.collisionState == true && (player2.pos[0] < player.pos[0]))
+	{
+		player2.pos[0] -= 1;
+	}
+	else if (player2.collisionState == true && (player2.pos[0] > player.pos[0]))
+	{
+		player2.pos[0] += 1;
+	}	
 }
 
 void render()
@@ -568,9 +602,12 @@ void render()
 	spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
 	spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
 	
-	//grabing resources to check collition
+	//check collision of each sprite
 	player.collisionState = checkCollision(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 							player.sp,player2.sp);
+	player2.collisionState = checkCollision(player2.pos[0],player2.pos[1],player.pos[0],player.pos[1],
+							player2.sp,player.sp);
+
 
 	//Display healthbars
 	drawHealthBar1(gl.xres, gl.yres);
