@@ -29,7 +29,7 @@ bool checkCollision(double xPos, double yPos, double xPos2, double yPos2, sprite
 {
 	
 	float cx = pSprite1.xres/8.0;
-	float cy = pSprite1.yres;
+	//float cy = pSprite1.yres;
 
 	double pRight = xPos + cx/3.5;
 	double pLeft = xPos - cx/3.5;
@@ -130,9 +130,9 @@ void backgroundRenderTimer(int xres, int yres)
 
 	//////////////////////////////////////////////////////////
 
-    clock_t timer2;
-    char s2[100];
-    float diff2;
+    //clock_t timer2;
+    //char s2[100];
+    //float diff2;
 	if(PROFILING_ON != 0)
 	{
 		clock_t timer2;
