@@ -41,6 +41,7 @@ class Player {
 	int animationState;
 	bool collisionState;
 	int positionState;
+	int playerHealth;
     public:
 	Player(int x, int posState) {
 	    VecZero(dir);
@@ -52,7 +53,7 @@ class Player {
 	    animationState = 0;
 	    collisionState = false;
 	    positionState = posState;
-
+	    playerHealth = 100;
 	}
 };
 
@@ -398,23 +399,23 @@ void physics()
 	    player2.vel[0] += 10;
 	}
 	player.animationState = 1;
-	gl.keyHeldr = 1;
+	//gl.keyHeldr = 1;
     }
-    if (!gl.keys[XK_r] && gl.keyHeldr == 1)
+    if (!gl.keys[XK_r] /*&& gl.keyHeldr == 1*/)
     {
 
-	gl.keyHeldr = 0;
+	//gl.keyHeldr = 0;
     } 
-    if (gl.keys[XK_f] && gl.keyHeldf == 0)
+    if (gl.keys[XK_f] /*&& gl.keyHeldf == 0*/)
     {
 
 	player.animationState = 2;
-	gl.keyHeldf = 1;
+	//gl.keyHeldf = 1;
     }
-    if (!gl.keys[XK_f] && gl.keyHeldf == 1)
+    if (!gl.keys[XK_f]/* && gl.keyHeldf == 1*/)
     {
 
-	gl.keyHeldf = 0;
+	//gl.keyHeldf = 0;
     }
 
     player2.pos[0] += player2.vel[0];
@@ -462,11 +463,12 @@ void physics()
 	//}
 
 
-	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
-	{
-	    player2.pos[0] += 10;
-	}
+		if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+		{
+	    	player2.pos[0] += 10;
+		}
     }
+
     if (gl.keys[XK_Left])
     {
 	//float checkPosX = player2.pos[0] - 10;
@@ -477,32 +479,32 @@ void physics()
 	//player2.pos[0] -= 10;
 	//}
 
-	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
-	{
-	    player2.pos[0] -= 10;
-	}
+		if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+		{
+	    	player2.pos[0] -= 10;
+		}
     }
-    if (gl.keys[XK_Shift_R] && gl.keyHeldr == 0)
+    if (gl.keys[XK_Return] /*&& gl.keyHeldr == 0*/)
     {
 
 	player2.animationState = 1;
-	gl.keyHeldr = 1;
+	//gl.keyHeldr = 1;
     }
-    if (!gl.keys[XK_Shift_R] && gl.keyHeldr == 1)
+    if (!gl.keys[XK_Return] /*&& /gl.keyHeldr == 1*/)
     {
 
-	gl.keyHeldr = 0;
+	//gl.keyHeldr = 0;
     } 
-    if (gl.keys[XK_Return] && gl.keyHeldf == 0)
+    if (gl.keys[XK_Shift_R]/* && gl.keyHeldf == 0*/)
     {
 
 	player2.animationState = 2;
-	gl.keyHeldf = 1;
+	//gl.keyHeldf = 1;
     }
-    if (!gl.keys[XK_Return] && gl.keyHeldf == 1)
+    if (!gl.keys[XK_Shift_R]/* && gl.keyHeldf == 1*/)
     {
 
-	gl.keyHeldf = 0;
+	//gl.keyHeldf = 0;
     } 
 
     //nudge player if colliding
