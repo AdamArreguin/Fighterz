@@ -54,6 +54,7 @@ class Player {
 		bool collisionState;
 		int positionState;
 		int pushedState;
+		int playerHealth;
 	public:
 		Player(int x, int posState, int startFrame) {
 			VecZero(dir);
@@ -66,6 +67,7 @@ class Player {
 			collisionState = false;
 			positionState = posState;
 			sp.spriteFrame = startFrame;
+			playerHealth = 100;
 			pushedState = 0;
 		}
 };
