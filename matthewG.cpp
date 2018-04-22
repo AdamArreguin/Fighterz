@@ -118,29 +118,8 @@ bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2)
 	
 }
 */
-class Timers {
-public:
-	double physicsRate;
-	double oobillion;
-	struct timespec timeStart, timeEnd, timeCurrent;
-	struct timespec animationTime;
-	Timers() {
-		physicsRate = 1.0 / 30.0;
-		oobillion = 1.0 / 1e9;
-	}
-	double timeDiff(struct timespec *start, struct timespec *end) {
-		return (double)(end->tv_sec - start->tv_sec ) +
-				(double)(end->tv_nsec - start->tv_nsec) * oobillion;
-	}
-	void timeCopy(struct timespec *dest, struct timespec *source) {
-		memcpy(dest, source, sizeof(struct timespec));
-	}
-	void recordTime(struct timespec *t) {
-		clock_gettime(CLOCK_REALTIME, t);
-	}
-} timers;
 
-int spritePunch(sprite &sp, int start, int end) {
+int spritePunch(sprite &sp, int start, int end, Timers timers) {
 	cout << "start: "<< start <<endl;
 	cout << "punch: "<<sp.spriteFrame << endl;
 	cout << "end: " << end << endl;
@@ -163,7 +142,7 @@ int spritePunch(sprite &sp, int start, int end) {
 		
 }
 
-int spriteKick(sprite &sp, int start, int end) {
+int spriteKick(sprite &sp, int start, int end, Timers timers) {
 	cout << "start: "<< start <<endl;
 	cout << "kick: "<<sp.spriteFrame << endl;
 	cout << "end: " << end << endl;
