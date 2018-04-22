@@ -55,7 +55,7 @@ class Player {
 		int positionState;
 		int pushedState;
 	public:
-		Player(int x, int posState) {
+		Player(int x, int posState, int startFrame) {
 			VecZero(dir);
 			pos[0] = x; // Starting point for fighter
 			pos[1] = 10;
@@ -65,12 +65,13 @@ class Player {
 			animationState = 0;
 			collisionState = false;
 			positionState = posState;
+			sp.spriteFrame = startFrame;
 			pushedState = 0;
 		}
 };
 
-Player player(200, 1);
-Player player2(800, 2);
+Player player(200, 1, 0);
+Player player2(800, 2, 8);
 //X Windows variables
 class X11_wrapper {
     private:
