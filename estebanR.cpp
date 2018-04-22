@@ -100,8 +100,9 @@ void healthBarOverlay(int x, int y)
     glPopMatrix();
 }
 
-void healthBarOverlay2(int x, int y)
-{   
+void healthBarOverlay2(int x, int y, int health)
+{  
+
     glPushMatrix();
     glTranslatef(x*.5+140, y-40, 1.0f);
     glRotatef(0.0f, 0.0f, 0.0f, 1.0f);
@@ -112,9 +113,17 @@ void healthBarOverlay2(int x, int y)
         glColor3ub(255, 255, 0);
 	    glVertex2f(-50, 40);
         glColor3ub(255, 255, 0);
-	    glVertex2f(450, 40);
+        //Decrease x when decreasing health
+        // -42 = 0 health
+        if(health < -42)
+        {
+            health = -42;
+        }
+	    glVertex2f(health, 40);
         glColor3ub(195, 195, 0);
-	    glVertex2f(450,  0);
+        //Decrease x when decreasing health
+        // -42 = 0 health
+	    glVertex2f(health,  0);
     glEnd();
     glPopMatrix();
 

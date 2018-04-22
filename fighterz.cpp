@@ -23,6 +23,7 @@ class Global {
     int menu_1[2];
     int menu_2[2];
     int menu_3[2];
+    int gameMenu[];
     int STATE;
 	int posFlag;
 	Global(){
@@ -53,8 +54,9 @@ class Player {
 		int animationState;
 		bool collisionState;
 		int positionState;
-		int pushedState;
+		int punchedState;
 		int playerHealth;
+		int health2 = 450;
 	public:
 		Player(int x, int posState, int startFrame) {
 			VecZero(dir);
@@ -68,7 +70,8 @@ class Player {
 			positionState = posState;
 			sp.spriteFrame = startFrame;
 			playerHealth = 100;
-			pushedState = 0;
+			punchedState = 0;
+			health2 = 450;
 		}
 };
 
@@ -214,7 +217,7 @@ extern void showTimer(int xres, int yres);
 extern void drawHealthBar1(int, int);
 extern void drawHealthBar2(int, int);
 extern void healthBarOverlay(int, int);
-extern void healthBarOverlay2(int, int);
+extern void healthBarOverlay2(int, int, int);
 extern void countdown(int, int);
 //==========================================================================
 // M A I N
@@ -302,12 +305,13 @@ void check_mouse(XEvent *e)
 		return;
 	}
 
+	// Change state of game when clicking on menu items
     if (gl.STATE == 0) {
         gl.mx = e->xbutton.x;
         gl.my = e->xbutton.y;
         cout << gl.mx << " " << gl.my << endl;
         if (e->xbutton.button==1) {
-        	// if (gl.mx)
+        	// Check which menu item was clicked
         	if (gl.mx < gl.menu[0]  && gl.mx > gl.menu[1] && 
         			gl.my < gl.menu_1[0] && gl.my > gl.menu_1[1]) {
         		gl.STATE = 2;
@@ -318,6 +322,15 @@ void check_mouse(XEvent *e)
     } else if (gl.STATE == 1) {
     	if(e->xbutton.button == 1) {
     		gl.STATE = 0;
+    	}
+    }
+
+    if (gl.STATE == 3) {
+    	gl.mx = e->xbutton.x;
+    	gl.my = e->xbutton.y;
+
+    	if (e->xbutton.button == 1) {
+
     	}
     }
 	if (e->xbutton.button==3) {
@@ -354,7 +367,14 @@ int check_keys(XEvent *e)
 	(void)shift;
 	switch (key) {
 		case XK_Escape:
-			return 1;
+			if (gl.STATE == 2) {
+				gl.STATE  = 3;
+			} else if (gl.STATE == 3) {
+				gl.STATE = 2;
+			} else {
+				return 1;
+			}
+			break;
 		case XK_f:
 			break;
 		case XK_r:
@@ -384,25 +404,26 @@ void physics()
 	}
 
 	//update player2 velocity when puched
-	if(player2.vel[0] > 0 && player2.pushedState == 1)
+	if(player2.vel[0] > 0)
 	{
 		player2.vel[0] -= 0.3;
+
+		if(player2.vel[0] < 0)
+		{
+			player2.vel[0] = 0;
+		}
 	}
-	if(player2.vel[0] < 0 && player2.pushedState == 1)
-	{
-		player2.pushedState = 0;
-		player2.vel[0] = 0;
-	}
-	
-	if(player2.vel[0] < 0 && player2.pushedState == 2)
+
+	if(player2.vel[0] < 0)
 	{
 		player2.vel[0] += 0.3;
+
+		if(player2.vel[0] > 0)
+		{
+			player2.vel[0] = 0;
+		}
 	}
-	if(player2.vel[0] > 0 && player2.pushedState == 2)
-	{
-		player2.pushedState = 0;
-		player2.vel[0] = 0;
-	}
+
 	//gl.keyHeldr = 1;
 
     if (!gl.keys[XK_r] /*&& gl.keyHeldr == 1*/)
@@ -422,8 +443,6 @@ void physics()
 	//gl.keyHeldf = 0;
     }
 
-    player2.pos[0] += player2.vel[0];
-    player2.pos[1] += player2.vel[1];
 
     //update player2 velocity due to gravity
     if (player2.pos[1] > 10)
@@ -578,7 +597,7 @@ void physics()
 			if (Punchval == 1)
 			{
 				player2.vel[0] += 10;
-				player2.pushedState = 1;
+				player2.punchedState = 1;
 			}
 		}
 		else if (player.pos[0] > player2.pos[0])
@@ -588,7 +607,7 @@ void physics()
 			if(Punchval == 1)
 			{
 				player2.vel[0] -= 10;
-				player2.pushedState = 2;
+				player2.punchedState = 2;
 			}
 		}
 		player.animationState = 1;
@@ -721,7 +740,7 @@ void physics()
 
 void render()
 {
-	if (gl.STATE == 0) {
+	if (gl.STATE == 0 || gl.STATE == 3) {
 		drawMenu(gl.xres, gl.yres);
 	} else if (gl.STATE == 1) {
     	glClearColor(.1,.1,.6,1);
@@ -818,7 +837,14 @@ void render()
 	    drawHealthBar1(gl.xres, gl.yres);
 	    drawHealthBar2(gl.xres, gl.yres);
 	    healthBarOverlay(gl.xres, gl.yres);
-	    healthBarOverlay2(gl.xres, gl.yres);
+
+	    if(player2.punchedState == 1)
+	    {
+	    	player2.health2 -= 50;
+	    }
+
+	    player2.punchedState = 0;
+	    healthBarOverlay2(gl.xres, gl.yres, player2.health2);
 	    countdown(gl.xres, gl.yres);
 	    //render background
 	    //backgroundRender();
