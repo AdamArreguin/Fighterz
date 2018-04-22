@@ -12,22 +12,34 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
 
 class Global {
-	public:
-		int xres, yres;
-		float gravity;
-		int keyHeldr;
-		int keyHeldf;
-		char keys[65536];
-		int posFlag;
-		Global(){
-			xres = 1280;
-			yres = 720;
-			gravity = 1.5;
-			memset(keys, 0, 65536);
-			keyHeldr = 0;
-			keyHeldf = 0;
-			posFlag = 1;
-		}
+    public:
+	int xres, yres;
+	float gravity;
+	int keyHeldr;
+	int keyHeldf;
+	char keys[65536];
+    int mx, my;
+    int menu[2];
+    int menu_1[2];
+    int menu_2[2];
+    int menu_3[2];
+    int STATE;
+	int posFlag;
+	Global(){
+	    xres = 1280;
+	    yres = 720;
+	    gravity = 1.5;
+	    memset(keys, 0, 65536);
+	    keyHeldr = 0;
+	    keyHeldf = 0;
+	    posFlag = 1;
+		menu[0] = 790;
+		menu[1] = 490;
+		menu_1[0] = 394;
+		menu_1[1] = 328;
+		menu_2[0] = 520;
+		menu_2[1] = 450;
+	}
 } gl;
 
 
@@ -61,110 +73,112 @@ Player player(200, 1);
 Player player2(800, 2);
 //X Windows variables
 class X11_wrapper {
-	private:
-		Display *dpy;
-		Window win;
-		GLXContext glc;
-	public:
-		X11_wrapper() {
-			GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None 	};
-			//GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
-			XSetWindowAttributes swa;
-			setup_screen_res(gl.xres, gl.yres);
-			dpy = XOpenDisplay(NULL);
-			if (dpy == NULL) {
-				std::cout << "\n\tcannot connect to X server" << std::endl;
-				exit(EXIT_FAILURE);
-			}
-			Window root = DefaultRootWindow(dpy);
-			XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
-			if (vi == NULL) {
-				std::cout << "\n\tno appropriate visual found\n" << std::endl;
-				exit(EXIT_FAILURE);
-			} 
-			Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
-			swa.colormap = cmap;
-			swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
-				PointerMotionMask | MotionNotify | ButtonPress | ButtonRelease |
-				StructureNotifyMask | SubstructureNotifyMask;
-			win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
-					vi->depth, InputOutput, vi->visual,
-					CWColormap | CWEventMask, &swa);
-			set_title();
-			glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
-			glXMakeCurrent(dpy, win, glc);
-			show_mouse_cursor(0);
-		}
-		~X11_wrapper() {
-			XDestroyWindow(dpy, win);
-			XCloseDisplay(dpy);
-		}
-		void set_title() {
-			//Set the window title bar.
-			XMapWindow(dpy, win);
-			XStoreName(dpy, win, "FighterZ");
-		}
-		void check_resize(XEvent *e) {
-			//The ConfigureNotify is sent by the
-			//server if the window is resized.
-			if (e->type != ConfigureNotify)
-				return;
-			XConfigureEvent xce = e->xconfigure;
-			if (xce.width != gl.xres || xce.height != gl.yres) {
-				//Window size did change.
-				reshape_window(xce.width, xce.height);
-			}
-		}
-		void reshape_window(int width, int height) {
-			//window has been resized.
-			setup_screen_res(width, height);
-			glViewport(0, 0, (GLint)width, (GLint)height);
-			glMatrixMode(GL_PROJECTION); glLoadIdentity();
-			glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-			glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
-			set_title();
-		}
-		void setup_screen_res(const int w, const int h) {
-			gl.xres = w;
-			gl.yres = h;
-		}
-		void swapBuffers() {
-			glXSwapBuffers(dpy, win);
-		}
-		bool getXPending() {
-			return XPending(dpy);
-		}
-		XEvent getXNextEvent() {
-			XEvent e;
-			XNextEvent(dpy, &e);
-			return e;
-		}
-		void set_mouse_position(int x, int y) {
-			XWarpPointer(dpy, None, win, 0, 0, 0, 0, x, y);
-		}
-		void show_mouse_cursor(const int onoff) {
-			if (onoff) {
-				//this removes our own blank cursor.
-				XUndefineCursor(dpy, win);
-				return;
-			}
-			//vars to make blank cursor
-			Pixmap blank;
-			XColor dummy;
-			char data[1] = {0};
-			Cursor cursor;
-			//make a blank cursor
-			blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
-			if (blank == None)
-				std::cout << "error: out of memory." << std::endl;
-			cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0		);
-			XFreePixmap(dpy, blank);
-			//this makes you the cursor. then set it using this function
-			XDefineCursor(dpy, win, cursor);
-			//after you do not need the cursor anymore use this function.
-			//it will undo the last change done by XDefineCursor
-			//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
-		}
+    private:
+	Display *dpy;
+	Window win;
+	GLXContext glc;
+    public:
+	X11_wrapper() {
+	    GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None 	};
+	    //GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
+	    XSetWindowAttributes swa;
+	    setup_screen_res(gl.xres, gl.yres);
+	    dpy = XOpenDisplay(NULL);
+	    if (dpy == NULL) {
+		std::cout << "\n\tcannot connect to X server" << std::endl;
+		exit(EXIT_FAILURE);
+	    }
+	    Window root = DefaultRootWindow(dpy);
+	    XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
+	    if (vi == NULL) {
+		std::cout << "\n\tno appropriate visual found\n" << std::endl;
+		exit(EXIT_FAILURE);
+	    } 
+	    Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
+	    swa.colormap = cmap;
+	    swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
+		PointerMotionMask | MotionNotify | ButtonPress | ButtonRelease |
+		StructureNotifyMask | SubstructureNotifyMask;
+	    win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
+		    vi->depth, InputOutput, vi->visual,
+		    CWColormap | CWEventMask, &swa);
+	    set_title();
+	    glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
+	    glXMakeCurrent(dpy, win, glc);
+	    show_mouse_cursor(0);
+	}
+	~X11_wrapper() {
+	    XDestroyWindow(dpy, win);
+	    XCloseDisplay(dpy);
+	}
+	void set_title() {
+	    //Set the window title bar.
+	    XMapWindow(dpy, win);
+	    XStoreName(dpy, win, "FighterZ");
+	}
+	void check_resize(XEvent *e) {
+	    //The ConfigureNotify is sent by the
+	    //server if the window is resized.
+	    if (e->type != ConfigureNotify)
+		return;
+	    XConfigureEvent xce = e->xconfigure;
+	    if (xce.width != gl.xres || xce.height != gl.yres) {
+		//Window size did change.
+		reshape_window(xce.width, xce.height);
+	    }
+	}
+	void reshape_window(int width, int height) {
+	    //window has been resized.
+	    setup_screen_res(width, height);
+	    glViewport(0, 0, (GLint)width, (GLint)height);
+	    glMatrixMode(GL_PROJECTION); glLoadIdentity();
+	    glMatrixMode(GL_MODELVIEW); glLoadIdentity();
+	    glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
+	    set_title();
+	}
+	void setup_screen_res(const int w, const int h) {
+	    gl.xres = w;
+	    gl.yres = h;
+	}
+	void swapBuffers() {
+	    glXSwapBuffers(dpy, win);
+	}
+	bool getXPending() {
+	    return XPending(dpy);
+	}
+	XEvent getXNextEvent() {
+	    XEvent e;
+	    XNextEvent(dpy, &e);
+	    return e;
+	}
+	void set_mouse_position(int x, int y) {
+	    XWarpPointer(dpy, None, win, 0, 0, 0, 0, x, y);
+	}
+	void show_mouse_cursor(const int onoff) {
+	    if (onoff) {
+		//this removes our own blank cursor.
+		XUndefineCursor(dpy, win);
+		return;
+	    }
+	    /*
+	    //vars to make blank cursor
+	    Pixmap blank;
+	    XColor dummy;
+	    char data[1] = {0};
+	    Cursor cursor;
+	    //make a blank cursor
+	    blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
+	    if (blank == None)
+		std::cout << "error: out of memory." << std::endl;
+	    cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0		);
+	    XFreePixmap(dpy, blank);
+	    //this makes you the cursor. then set it using this function
+	    XDefineCursor(dpy, win, cursor);
+	    //after you do not need the cursor anymore use this function.
+	    //it will undo the last change done by XDefineCursor
+	    //(thus do only use ONCE XDefineCursor and then XUndefineCursor):
+	*/
+	}
 } x11;
 
 //function prototypes
@@ -189,6 +203,9 @@ extern int spriteKick(sprite&, int, int);
 extern void checkPosition(sprite&, sprite&, double, double, int&, int&, int&);
 extern int Punch1(double, double,double, double, sprite, sprite, double);
 
+extern int Punch1(double, double,double, double, sprite, sprite);
+extern void drawMenu(int, int);
+extern void showControls(int, int, int);
 //
 extern void showTimer(int xres, int yres);
 extern void drawHealthBar1(int, int);
@@ -281,6 +298,25 @@ void check_mouse(XEvent *e)
 			e->type != MotionNotify) {
 		return;
 	}
+
+    if (gl.STATE == 0) {
+        gl.mx = e->xbutton.x;
+        gl.my = e->xbutton.y;
+        cout << gl.mx << " " << gl.my << endl;
+        if (e->xbutton.button==1) {
+        	// if (gl.mx)
+        	if (gl.mx < gl.menu[0]  && gl.mx > gl.menu[1] && 
+        			gl.my < gl.menu_1[0] && gl.my > gl.menu_1[1]) {
+        		gl.STATE = 2;
+        	} else if (gl.mx < gl.menu[0]  && gl.mx > gl.menu[1] 
+        			&& gl.my < gl.menu_2[0] && gl.my > gl.menu_2[1])
+        		gl.STATE = 1;
+    	}
+    } else if (gl.STATE == 1) {
+    	if(e->xbutton.button == 1) {
+    		gl.STATE = 0;
+    	}
+    }
 	if (e->xbutton.button==3) {
 		//Right button is down
 	}
@@ -682,97 +718,108 @@ void physics()
 
 void render()
 {
-	glClearColor(0.1, 0.1, 0.1, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT);
-	if(PROFILING_ON != 0)
+	if (gl.STATE == 0) {
+		drawMenu(gl.xres, gl.yres);
+	} else if (gl.STATE == 1) {
+    	glClearColor(.1,.1,.6,1);
+    	glClear(GL_COLOR_BUFFER_BIT);
+        int x = gl.xres * .25;
+        int y = gl.yres;
+        showControls(x, y, 1);
+        x = gl.xres * .75;
+        showControls(x,y,2);
+	} else if (gl.STATE == 2) {
+	    glClearColor(0.1, 0.1, 0.1, 1.0);
+	    glClear(GL_COLOR_BUFFER_BIT);
+	    if(PROFILING_ON != 0)
 		backgroundRenderTimer(gl.xres,gl.yres);
-	else
+	    else
 		backgroundRender(gl.xres,gl.yres);
 
-	//Display player names
-	const char* P1 = "Player 1";
-	const char* P2 = "Player 2";
-	displayName(P1, 900, 1);
-	displayName(P2, 900, 2);
-	const char* SC = "Scores :";
-	if(PROFILING_ON !=0){
+	    //Display player names
+	    const char* P1 = "Player 1";
+	    const char* P2 = "Player 2";
+	    displayName(P1, 900, 1);
+	    displayName(P2, 900, 2);
+	    const char* SC = "Scores :";
+	    if(PROFILING_ON !=0){
 		displayScore(SC,800,1);
 		displayScoreOpt(SC,800,1);
-	}
-	/*
-	 * Commenting out for clean look and used when we create
-	 * a main menu
-	//Display controls
-	const char* CONTROLS = "CONTROLS";
-	const char* LINE = "-------------------";
-	const char* JUMP = "Jump: W";
-	const char* LEFT = "Move Left: A";
-	const char* RIGHT = "Move Right: D";
-	controls(75, 850, CONTROLS);
-	controls(87, 840, LINE);
-	controls(80, 795, LEFT);
-	controls(83, 770, RIGHT);
-	controls(60, 820, JUMP);
-	 */
+	    }
+	    /*
+	     * Commenting out for clean look and used when we create
+	     * a main menu
+	    //Display controls
+	    const char* CONTROLS = "CONTROLS";
+	    const char* LINE = "-------------------";
+	    const char* JUMP = "Jump: W";
+	    const char* LEFT = "Move Left: A";
+	    const char* RIGHT = "Move Right: D";
+	    controls(75, 850, CONTROLS);
+	    controls(87, 840, LINE);
+	    controls(80, 795, LEFT);
+	    controls(83, 770, RIGHT);
+	    controls(60, 820, JUMP);
+	    */
 
 
-	checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0], gl.posFlag, player.positionState, player2.positionState);
-	if (player.animationState == 1) {
+	    checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0], gl.posFlag, player.positionState, player2.positionState);
+	    if (player.animationState == 1) {
 		if(player.positionState == 1) {
-			// return player.animation state back to 0 after spritePunch();
-			player.animationState = spritePunch(player.sp,0,3);
+		    // return player.animation state back to 0 after spritePunch();
+		    player.animationState = spritePunch(player.sp,0,3);
 		}
 		else if( player.positionState == 2) {
-			player.animationState = spritePunch(player.sp, 8,11);
+		    player.animationState = spritePunch(player.sp, 8,11);
 		} 
-	}
+	    }
 
-	if (player2.animationState == 1) {
+	    if (player2.animationState == 1) {
 		if (player2.positionState == 2) {
-			// return player.animation state back to 0 after spritePunch(); 
-			player2.animationState = spritePunch(player2.sp,8,11);
+		    // return player.animation state back to 0 after spritePunch(); 
+		    player2.animationState = spritePunch(player2.sp,8,11);
 		}
 		else if (player2.positionState == 1) {
-			player2.animationState = spritePunch(player2.sp,0,3);
+		    player2.animationState = spritePunch(player2.sp,0,3);
 		} 
 
-	}
+	    }
 
-	else if (player.animationState == 2) {
+	    else if (player.animationState == 2) {
 		// return player.animation state back to 0 after spriteKick();
 		if(player.positionState == 1)
-			player.animationState = spriteKick(player.sp, 4, 7);
+		    player.animationState = spriteKick(player.sp, 4, 7);
 		else if( player.positionState == 2) {
-			player.animationState = spriteKick(player.sp, 12,15);
+		    player.animationState = spriteKick(player.sp, 12,15);
 		} 
-	}
-	if (player2.animationState == 2) {
+	    }
+	    if (player2.animationState == 2) {
 		// return player.animation state back to 0 after spriteKick();
 		if (player2.positionState == 2)
-			player2.animationState = spriteKick(player2.sp,12,15);
+		    player2.animationState = spriteKick(player2.sp,12,15);
 		else if (player2.positionState == 1) {
-			player2.animationState = spriteKick(player2.sp,4,7);
+		    player2.animationState = spriteKick(player2.sp,4,7);
 		} 
+	    }
+	    spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
+	    spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
+
+	    //check collision of each sprite
+	    player.collisionState = checkCollision(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+		    player.sp,player2.sp);
+	    player2.collisionState = checkCollision(player2.pos[0],player2.pos[1],player.pos[0],player.pos[1],
+		    player2.sp,player.sp);
+
+
+	    //Display healthbars
+	    drawHealthBar1(gl.xres, gl.yres);
+	    drawHealthBar2(gl.xres, gl.yres);
+	    healthBarOverlay(gl.xres, gl.yres);
+	    healthBarOverlay2(gl.xres, gl.yres);
+	    countdown(gl.xres, gl.yres);
+	    //render background
+	    //backgroundRender();
 	}
-	spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
-	spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
-
-	//check collision of each sprite
-	player.collisionState = checkCollision(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
-			player.sp,player2.sp);
-	player2.collisionState = checkCollision(player2.pos[0],player2.pos[1],player.pos[0],player.pos[1],
-			player2.sp,player.sp);
-
-
-	//Display healthbars
-	drawHealthBar1(gl.xres, gl.yres);
-	drawHealthBar2(gl.xres, gl.yres);
-	healthBarOverlay(gl.xres, gl.yres);
-	healthBarOverlay2(gl.xres, gl.yres);
-	countdown(gl.xres, gl.yres);
-	//render background
-	//backgroundRender();
-
 }
 
 
