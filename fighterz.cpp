@@ -18,6 +18,12 @@ class Global {
 	int keyHeldr;
 	int keyHeldf;
 	char keys[65536];
+    int mx, my;
+    int menu[2];
+    int menu_1[2];
+    int menu_2[2];
+    int menu_3[2];
+    int STATE;
 	int posFlag;
 	Global(){
 	    xres = 1280;
@@ -27,6 +33,12 @@ class Global {
 	    keyHeldr = 0;
 	    keyHeldf = 0;
 	    posFlag = 1;
+		menu[0] = 790;
+		menu[1] = 490;
+		menu_1[0] = 394;
+		menu_1[1] = 328;
+		menu_2[0] = 520;
+		menu_2[1] = 450;
 	}
 } gl;
 
@@ -148,6 +160,7 @@ class X11_wrapper {
 		XUndefineCursor(dpy, win);
 		return;
 	    }
+	    /*
 	    //vars to make blank cursor
 	    Pixmap blank;
 	    XColor dummy;
@@ -164,6 +177,7 @@ class X11_wrapper {
 	    //after you do not need the cursor anymore use this function.
 	    //it will undo the last change done by XDefineCursor
 	    //(thus do only use ONCE XDefineCursor and then XUndefineCursor):
+	*/
 	}
 } x11;
 
@@ -188,7 +202,8 @@ extern int spritePunch(sprite&, int, int);
 extern int spriteKick(sprite&, int, int);
 extern void checkPosition(sprite&, sprite&, double, double, int&, int&, int&);
 extern int Punch1(double, double,double, double, sprite, sprite);
-
+extern void drawMenu(int, int);
+extern void showControls(int, int, int);
 //
 extern void showTimer(int xres, int yres);
 extern void drawHealthBar1(int, int);
@@ -275,15 +290,34 @@ void normalize2d(Vec v)
 
 void check_mouse(XEvent *e)
 {
-    //Was a mouse button clicked?
-    if (e->type != ButtonPress &&
-	    e->type != ButtonRelease &&
-	    e->type != MotionNotify) {
-	return;
+	//Was a mouse button clicked?
+	if (e->type != ButtonPress &&
+			e->type != ButtonRelease &&
+			e->type != MotionNotify) {
+		return;
+	}
+
+    if (gl.STATE == 0) {
+        gl.mx = e->xbutton.x;
+        gl.my = e->xbutton.y;
+        cout << gl.mx << " " << gl.my << endl;
+        if (e->xbutton.button==1) {
+        	// if (gl.mx)
+        	if (gl.mx < gl.menu[0]  && gl.mx > gl.menu[1] && 
+        			gl.my < gl.menu_1[0] && gl.my > gl.menu_1[1]) {
+        		gl.STATE = 2;
+        	} else if (gl.mx < gl.menu[0]  && gl.mx > gl.menu[1] 
+        			&& gl.my < gl.menu_2[0] && gl.my > gl.menu_2[1])
+        		gl.STATE = 1;
+    	}
+    } else if (gl.STATE == 1) {
+    	if(e->xbutton.button == 1) {
+    		gl.STATE = 0;
+    	}
     }
-    if (e->xbutton.button==3) {
-	//Right button is down
-    }
+	if (e->xbutton.button==3) {
+		//Right button is down
+	}
 }
 
 int check_keys(XEvent *e)
@@ -529,97 +563,108 @@ void physics()
 
 void render()
 {
-    glClearColor(0.1, 0.1, 0.1, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    if(PROFILING_ON != 0)
-	backgroundRenderTimer(gl.xres,gl.yres);
-    else
-	backgroundRender(gl.xres,gl.yres);
+	if (gl.STATE == 0) {
+		drawMenu(gl.xres, gl.yres);
+	} else if (gl.STATE == 1) {
+    	glClearColor(.1,.1,.6,1);
+    	glClear(GL_COLOR_BUFFER_BIT);
+        int x = gl.xres * .25;
+        int y = gl.yres;
+        showControls(x, y, 1);
+        x = gl.xres * .75;
+        showControls(x,y,2);
+	} else if (gl.STATE == 2) {
+	    glClearColor(0.1, 0.1, 0.1, 1.0);
+	    glClear(GL_COLOR_BUFFER_BIT);
+	    if(PROFILING_ON != 0)
+		backgroundRenderTimer(gl.xres,gl.yres);
+	    else
+		backgroundRender(gl.xres,gl.yres);
 
-    //Display player names
-    const char* P1 = "Player 1";
-    const char* P2 = "Player 2";
-    displayName(P1, 900, 1);
-    displayName(P2, 900, 2);
-    const char* SC = "Scores :";
-    if(PROFILING_ON !=0){
-	displayScore(SC,800,1);
-	displayScoreOpt(SC,800,1);
-    }
-    /*
-     * Commenting out for clean look and used when we create
-     * a main menu
-    //Display controls
-    const char* CONTROLS = "CONTROLS";
-    const char* LINE = "-------------------";
-    const char* JUMP = "Jump: W";
-    const char* LEFT = "Move Left: A";
-    const char* RIGHT = "Move Right: D";
-    controls(75, 850, CONTROLS);
-    controls(87, 840, LINE);
-    controls(80, 795, LEFT);
-    controls(83, 770, RIGHT);
-    controls(60, 820, JUMP);
-    */
+	    //Display player names
+	    const char* P1 = "Player 1";
+	    const char* P2 = "Player 2";
+	    displayName(P1, 900, 1);
+	    displayName(P2, 900, 2);
+	    const char* SC = "Scores :";
+	    if(PROFILING_ON !=0){
+		displayScore(SC,800,1);
+		displayScoreOpt(SC,800,1);
+	    }
+	    /*
+	     * Commenting out for clean look and used when we create
+	     * a main menu
+	    //Display controls
+	    const char* CONTROLS = "CONTROLS";
+	    const char* LINE = "-------------------";
+	    const char* JUMP = "Jump: W";
+	    const char* LEFT = "Move Left: A";
+	    const char* RIGHT = "Move Right: D";
+	    controls(75, 850, CONTROLS);
+	    controls(87, 840, LINE);
+	    controls(80, 795, LEFT);
+	    controls(83, 770, RIGHT);
+	    controls(60, 820, JUMP);
+	    */
 
 
-    checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0], gl.posFlag, player.positionState, player2.positionState);
-    if (player.animationState == 1) {
-	if(player.positionState == 1) {
-	    // return player.animation state back to 0 after spritePunch();
-	    player.animationState = spritePunch(player.sp,0,3);
+	    checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0], gl.posFlag, player.positionState, player2.positionState);
+	    if (player.animationState == 1) {
+		if(player.positionState == 1) {
+		    // return player.animation state back to 0 after spritePunch();
+		    player.animationState = spritePunch(player.sp,0,3);
+		}
+		else if( player.positionState == 2) {
+		    player.animationState = spritePunch(player.sp, 8,11);
+		} 
+	    }
+
+	    if (player2.animationState == 1) {
+		if (player2.positionState == 2) {
+		    // return player.animation state back to 0 after spritePunch(); 
+		    player2.animationState = spritePunch(player2.sp,8,11);
+		}
+		else if (player2.positionState == 1) {
+		    player2.animationState = spritePunch(player2.sp,0,3);
+		} 
+
+	    }
+
+	    else if (player.animationState == 2) {
+		// return player.animation state back to 0 after spriteKick();
+		if(player.positionState == 1)
+		    player.animationState = spriteKick(player.sp, 4, 7);
+		else if( player.positionState == 2) {
+		    player.animationState = spriteKick(player.sp, 12,15);
+		} 
+	    }
+	    if (player2.animationState == 2) {
+		// return player.animation state back to 0 after spriteKick();
+		if (player2.positionState == 2)
+		    player2.animationState = spriteKick(player2.sp,12,15);
+		else if (player2.positionState == 1) {
+		    player2.animationState = spriteKick(player2.sp,4,7);
+		} 
+	    }
+	    spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
+	    spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
+
+	    //check collision of each sprite
+	    player.collisionState = checkCollision(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+		    player.sp,player2.sp);
+	    player2.collisionState = checkCollision(player2.pos[0],player2.pos[1],player.pos[0],player.pos[1],
+		    player2.sp,player.sp);
+
+
+	    //Display healthbars
+	    drawHealthBar1(gl.xres, gl.yres);
+	    drawHealthBar2(gl.xres, gl.yres);
+	    healthBarOverlay(gl.xres, gl.yres);
+	    healthBarOverlay2(gl.xres, gl.yres);
+	    countdown(gl.xres, gl.yres);
+	    //render background
+	    //backgroundRender();
 	}
-	else if( player.positionState == 2) {
-	    player.animationState = spritePunch(player.sp, 8,11);
-	} 
-    }
-
-    if (player2.animationState == 1) {
-	if (player2.positionState == 2) {
-	    // return player.animation state back to 0 after spritePunch(); 
-	    player2.animationState = spritePunch(player2.sp,8,11);
-	}
-	else if (player2.positionState == 1) {
-	    player2.animationState = spritePunch(player2.sp,0,3);
-	} 
-
-    }
-
-    else if (player.animationState == 2) {
-	// return player.animation state back to 0 after spriteKick();
-	if(player.positionState == 1)
-	    player.animationState = spriteKick(player.sp, 4, 7);
-	else if( player.positionState == 2) {
-	    player.animationState = spriteKick(player.sp, 12,15);
-	} 
-    }
-    if (player2.animationState == 2) {
-	// return player.animation state back to 0 after spriteKick();
-	if (player2.positionState == 2)
-	    player2.animationState = spriteKick(player2.sp,12,15);
-	else if (player2.positionState == 1) {
-	    player2.animationState = spriteKick(player2.sp,4,7);
-	} 
-    }
-    spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
-    spriteRender(player2.sp,player2.pos[0], player2.pos[1], player2.pos[2]);
-
-    //check collision of each sprite
-    player.collisionState = checkCollision(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
-	    player.sp,player2.sp);
-    player2.collisionState = checkCollision(player2.pos[0],player2.pos[1],player.pos[0],player.pos[1],
-	    player2.sp,player.sp);
-
-
-    //Display healthbars
-    drawHealthBar1(gl.xres, gl.yres);
-    drawHealthBar2(gl.xres, gl.yres);
-    healthBarOverlay(gl.xres, gl.yres);
-    healthBarOverlay2(gl.xres, gl.yres);
-    countdown(gl.xres, gl.yres);
-    //render background
-    //backgroundRender();
-
 }
 
 
