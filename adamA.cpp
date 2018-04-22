@@ -67,14 +67,26 @@ void drawHealthBar2(int x, int y)
 	glPopMatrix();
 }
 
-int Punch1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2)
+int Punch1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2,
+		double extx)
 {
 	float cx = pSprite1.xres/8.0;
 	float cy = pSprite1.yres;
 
-	double extxPos = xPos + 5;
-	double pRight = extxPos + cx/3.5;
-	double pLeft = extxPos - cx/3.5;
+	double pRight = xPos + cx/3.5;
+	double pLeft = xPos - cx/3.5;
+
+	double extxPos = 0;
+	if(extx > 0)
+	{
+		extxPos = xPos + extx;
+		pRight = extxPos + cx/3.5;
+	}
+	else if(extx < 0)
+	{
+		extxPos = xPos + extx;
+		pLeft = extxPos - cx/3.5;
+	}
 
 	double pRight2 = xPos2 + cx/3.5;
 	double pLeft2 = xPos2 - cx/3.5;
