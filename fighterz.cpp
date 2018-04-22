@@ -364,6 +364,132 @@ void physics()
 		player2.pushedState = 0;
 		player2.vel[0] = 0;
 	}
+	//gl.keyHeldr = 1;
+
+    if (!gl.keys[XK_r] /*&& gl.keyHeldr == 1*/)
+    {
+
+	//gl.keyHeldr = 0;
+    } 
+    if (gl.keys[XK_f] /*&& gl.keyHeldf == 0*/)
+    {
+
+	player.animationState = 2;
+	//gl.keyHeldf = 1;
+    }
+    if (!gl.keys[XK_f]/* && gl.keyHeldf == 1*/)
+    {
+
+	//gl.keyHeldf = 0;
+    }
+
+    player2.pos[0] += player2.vel[0];
+    player2.pos[1] += player2.vel[1];
+
+    //update player2 velocity due to gravity
+    if (player2.pos[1] > 10)
+    {
+	player2.vel[1] -= gl.gravity;
+    }
+
+    //Check for collision with window edges
+    if (player2.pos[0] < 15) {
+	player2.pos[0] = 15;
+    }
+    if (player2.pos[0] > 1235) {
+	player2.pos[0] = 1235;
+    }
+    if (player2.pos[1] < 10) {
+	player2.pos[1] += (float)gl.yres;
+	player2.pos[1] = 10;
+	player2.vel[1] = 0;
+    }
+    if (player2.pos[1] > (float)gl.yres) {
+	player2.pos[1] -= (float)gl.yres;
+    }
+
+    //---------------------------------------------------
+    //check keys pressed now
+
+    if (gl.keys[XK_Up] && player2.pos[1] <= 10)
+    {
+	player2.vel[1] += 30;
+    }
+
+    if (gl.keys[XK_Right])
+    {
+	//player2.pos[0] += 10;
+	//float checkPosX = player2.pos[0] + 10;
+	//if((!checkCollision(checkPosX,player2.pos[1],player.pos[0],player.pos[1],
+	//					player2.sp,player.sp)) ||
+	//	player2.pos[1] > player.pos[1])
+	//{
+	//	player2.pos[0] += 10;
+	//}
+
+
+		if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+		{
+	    	player2.pos[0] += 10;
+		}
+    }
+
+    if (gl.keys[XK_Left])
+    {
+	//float checkPosX = player2.pos[0] - 10;
+	//if((!checkCollision(checkPosX,player2.pos[1],player.pos[0],player.pos[1],
+	//					player2.sp,player.sp)) ||
+	//	player2.pos[1] > player.pos[1])
+	//{
+	//player2.pos[0] -= 10;
+	//}
+
+		if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+		{
+	    	player2.pos[0] -= 10;
+		}
+    }
+    if (gl.keys[XK_Return] /*&& gl.keyHeldr == 0*/)
+    {
+
+	player2.animationState = 1;
+	//gl.keyHeldr = 1;
+    }
+    if (!gl.keys[XK_Return] /*&& /gl.keyHeldr == 1*/)
+    {
+
+	//gl.keyHeldr = 0;
+    } 
+    if (gl.keys[XK_Shift_R]/* && gl.keyHeldf == 0*/)
+    {
+
+	player2.animationState = 2;
+	//gl.keyHeldf = 1;
+    }
+    if (!gl.keys[XK_Shift_R]/* && gl.keyHeldf == 1*/)
+    {
+
+	//gl.keyHeldf = 0;
+    } 
+
+    //nudge player if colliding
+    if(player.collisionState == true && (player.pos[0] < player2.pos[0]))
+    {
+	player.pos[0] -= 1;
+    }
+    else if (player.collisionState == true && (player.pos[0] > player2.pos[0]))
+    {
+	player.pos[0] += 1;
+    }
+
+    if(player2.collisionState == true && (player2.pos[0] < player.pos[0]))
+    {
+	player2.pos[0] -= 1;
+    }
+    else if (player2.collisionState == true && (player2.pos[0] > player.pos[0]))
+    {
+	player2.pos[0] += 1;
+    }	
 
 	//Check for collision with window edges
 	if (player.pos[0] < 15) {

@@ -101,9 +101,13 @@ class sprite {
         int xres, yres;
         SpriteTexture spTex;
         int spriteFrame;
+        double kickDelay;
+        double punchDelay;
         sprite() {
             xres= 1024, yres= 64;
             spriteFrame=0;
+            punchDelay = 0.075;
+            kickDelay = 0.09;
         }
 };
 
