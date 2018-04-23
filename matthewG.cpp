@@ -119,7 +119,7 @@ bool grabResources(double xPos1, double yPos1, double xPos2, double yPos2)
 }
 */
 
-int spritePunch(sprite &sp, int start, int end, Timers timers) {
+int spritePunch(sprite &sp, int start, int end, Timers &timers) {
 	cout << "start: "<< start <<endl;
 	cout << "punch: "<<sp.spriteFrame << endl;
 	cout << "end: " << end << endl;
@@ -142,12 +142,12 @@ int spritePunch(sprite &sp, int start, int end, Timers timers) {
 		
 }
 
-int spriteKick(sprite &sp, int start, int end, Timers timers) {
+int spriteKick(sprite &sp, int start, int end, Timers &timers) {
 	cout << "start: "<< start <<endl;
 	cout << "kick: "<<sp.spriteFrame << endl;
 	cout << "end: " << end << endl;
 	timers.recordTime(&timers.timeCurrent);
-	double timeSpan = timers.timeDiff(&timers.animationTime, &timers.timeCurrent);
+	double timeSpan = timers.timeDiff(&timers.animationTime2, &timers.timeCurrent);
 	if(timeSpan > sp.kickDelay)
 	{
 		if (sp.spriteFrame < start)
@@ -157,7 +157,7 @@ int spriteKick(sprite &sp, int start, int end, Timers timers) {
 			return 0;
 		}
 		++sp.spriteFrame;
-		timers.recordTime(&timers.animationTime);
+		timers.recordTime(&timers.animationTime2);
 		return 2;
 		}
 	else 

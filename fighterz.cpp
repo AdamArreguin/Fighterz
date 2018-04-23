@@ -50,6 +50,7 @@ class Player {
 	public:
 		sprite sp;
 		Timers timers;
+		Timers timers2;
 		Vec dir;
 		Vec pos;
 		Vec vel;
@@ -213,8 +214,8 @@ extern void displayScoreOpt(const char*, int, int);
 extern void controls (int, int, const char*);
 extern void initSprite(sprite&);
 extern void spriteRender(sprite,double, double, double);
-extern int spritePunch(sprite&, int, int, Timers);
-extern int spriteKick(sprite&, int, int, Timers);
+extern int spritePunch(sprite&, int, int, Timers&);
+extern int spriteKick(sprite&, int, int, Timers&);
 extern void checkPosition(sprite&, sprite&, double, double, int&, int&, int&);
 extern int Punch1(double, double,double, double, sprite, sprite, double);
 extern int Kick1(double, double,double, double, sprite, sprite, double);
@@ -248,10 +249,10 @@ int main()
 	srand(time(NULL));
 	x11.set_mouse_position(100, 100);
 	int done=0;
-	time_t start, end;
-	time(&start);
-	double hold = 0;
-	float elapsed = 0;
+	//time_t start, end;
+	//time(&start);
+	//double hold = 0;
+	//float elapsed = 0;
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -261,7 +262,7 @@ int main()
 		}
 		physics();
 		//timer for one second
-		time(&end);
+		/*time(&end);
 		elapsed = difftime(end,start);
 		if(gl.secpas == 0)
 		{
@@ -271,7 +272,7 @@ int main()
 				gl.secpas = 1;
 			}
 		}
-		hold = elapsed;
+		hold = elapsed;*/
 		render();
 		x11.swapBuffers();
 	}
@@ -514,8 +515,8 @@ void physics()
 	if (gl.keys[XK_r]/*&& gl.keyHeldr == 0*/)
 	{ 
 		//check if a second has passed
-		if(gl.secpas == 1)
-		{
+		//if(gl.secpas == 1)
+		//{
 			int Punchval = 0;
 			if(player.pos[0] < player2.pos[0])
 			{
@@ -538,8 +539,8 @@ void physics()
 				}
 			}
 			player.animationState = 1;
-			gl.secpas = 0;
-		} 
+			//gl.secpas = 0;
+		//} 
 	}
 	//gl.keyHeldr = 1;
 
@@ -550,8 +551,8 @@ void physics()
 	} 
 	if (gl.keys[XK_f] /*&& gl.keyHeldf == 0*/)
 	{
-		if(gl.secpas == 1)
-		{
+		//if(gl.secpas == 1)
+		//{
 			int Kickval = 0;
 			if(player.pos[0] < player2.pos[0])
 			{
@@ -574,8 +575,8 @@ void physics()
 				}
 			}
 			player.animationState = 2;
-			gl.secpas = 0;
-		} 
+			//gl.secpas = 0;
+		//} 
 
 		//gl.keyHeldf = 1;
 	}
@@ -634,8 +635,8 @@ void physics()
 	if (gl.keys[XK_Shift_R] /*&& gl.keyHeldr == 0*/)
 	{
 
-		if(gl.secpas == 1)
-		{
+		//if(gl.secpas == 1)
+		//{
 			int Kickval = 0;
 			if(player.pos[0] > player2.pos[0])
 			{
@@ -658,8 +659,8 @@ void physics()
 				}
 			}
 			player2.animationState = 2;
-			gl.secpas = 0;
-		} 
+			//gl.secpas = 0;
+		//} 
 		//gl.keyHeldr = 1;
 	}
 	if (!gl.keys[XK_Shift_R] /*&& gl.keyHeldr == 1*/)
@@ -669,8 +670,8 @@ void physics()
 	} 
 	if (gl.keys[XK_Return] /*&& gl.keyHeldf == 0*/)
 	{
-		if(gl.secpas == 1)
-		{
+		//if(gl.secpas == 1)
+		//{
 			int Punchval = 0;
 			if(player.pos[0] > player2.pos[0])
 			{
@@ -693,8 +694,8 @@ void physics()
 				}
 			}
 			player2.animationState = 1;
-			gl.secpas = 0;
-		}
+			//gl.secpas = 0;
+		//
 		//gl.keyHeldf = 1;
 	}
 	if (!gl.keys[XK_Return] /*&& gl.keyHeldf == 1*/)
@@ -784,10 +785,10 @@ void render()
 		if (player2.animationState == 1) {
 			if (player2.positionState == 2) {
 				// return player.animation state back to 0 after spritePunch(); 
-				player2.animationState = spritePunch(player2.sp,8,11,player2.timers);
+				player2.animationState = spritePunch(player2.sp,8,11,player2.timers2);
 			}
 			else if (player2.positionState == 1) {
-				player2.animationState = spritePunch(player2.sp,0,3, player2.timers);
+				player2.animationState = spritePunch(player2.sp,0,3, player2.timers2);
 			} 
 
 		}
@@ -804,9 +805,9 @@ void render()
 		if (player2.animationState == 2) {
 			// return player.animation state back to 0 after spriteKick();
 			if (player2.positionState == 2)
-				player2.animationState = spriteKick(player2.sp,12,15,player2.timers);
+				player2.animationState = spriteKick(player2.sp,12,15,player2.timers2);
 			else if (player2.positionState == 1) {
-				player2.animationState = spriteKick(player2.sp,4,7,player2.timers);
+				player2.animationState = spriteKick(player2.sp,4,7,player2.timers2);
 			} 
 		}
 		spriteRender(player.sp,player.pos[0], player.pos[1], player.pos[2]);
