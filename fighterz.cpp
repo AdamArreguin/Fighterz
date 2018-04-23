@@ -425,7 +425,7 @@ void physics()
 	player2.pos[0] += player2.vel[0];
 	player2.pos[1] += player2.vel[1];
 	//update player velocity due to gravity
-	if (player.pos[1] > 10)
+	if (player.pos[1] > 80)
 	{
 		player.vel[1] -= gl.gravity;
 	}
@@ -481,9 +481,9 @@ void physics()
 	if (player.pos[0] > 1235) {
 		player.pos[0] = 1235;
 	}
-	if (player.pos[1] < 10) {
+	if (player.pos[1] < 70) {
 		player.pos[1] += (float)gl.yres;
-		player.pos[1] = 10;
+		player.pos[1] = 70;
 		player.vel[1] = 0;
 	}
 	if (player.pos[1] > (float)gl.yres) {
@@ -493,7 +493,7 @@ void physics()
 	//---------------------------------------------------
 	//check keys pressed now
 
-	if (gl.keys[XK_w] && player.pos[1] <= 10)
+	if (gl.keys[XK_w] && player.pos[1] <= 70)
 	{
 		player.vel[1] += 30;
 	}
@@ -589,7 +589,7 @@ void physics()
 
 
 	//update player2 velocity due to gravity
-	if (player2.pos[1] > 10)
+	if (player2.pos[1] > 70)
 	{
 		player2.vel[1] -= gl.gravity;
 	}
@@ -601,9 +601,9 @@ void physics()
 	if (player2.pos[0] > 1235) {
 		player2.pos[0] = 1235;
 	}
-	if (player2.pos[1] < 10) {
+	if (player2.pos[1] < 70) {
 		player2.pos[1] += (float)gl.yres;
-		player2.pos[1] = 10;
+		player2.pos[1] = 70;
 		player2.vel[1] = 0;
 	}
 	if (player2.pos[1] > (float)gl.yres) {
@@ -613,7 +613,7 @@ void physics()
 	//---------------------------------------------------
 	//check keys pressed now
 
-	if (gl.keys[XK_Up] && player2.pos[1] <= 10)
+	if (gl.keys[XK_Up] && player2.pos[1] <= 70)
 	{
 		player2.vel[1] += 30;
 	}
