@@ -13,6 +13,7 @@ using namespace std;
 #include <GL/glx.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "log.h"
 #include "fonts.h"
 #include "matthewG.h"

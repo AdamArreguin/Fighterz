@@ -71,7 +71,7 @@ int Punch1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1
 		double extx)
 {
 	float cx = pSprite1.xres/8.0;
-	float cy = pSprite1.yres;
+	//float cy = pSprite1.yres;
 
 	double pRight = xPos + cx/3.5;
 	double pLeft = xPos - cx/3.5;
@@ -90,6 +90,109 @@ int Punch1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1
 
 	double pRight2 = xPos2 + cx/3.5;
 	double pLeft2 = xPos2 - cx/3.5;
+
+	if((pRight > pLeft2 && pLeft < pLeft2) || (pLeft < pRight2 && pRight > pRight2))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int Punch2(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2,
+		double extx)
+{
+	float cx = pSprite1.xres/8.0;
+	//float cy = pSprite1.yres;
+
+	double pRight = xPos + cx/3.5;
+	double pLeft = xPos - cx/3.5;
+	double pRight2 = xPos2 + cx/3.5;
+	double pLeft2 = xPos2 - cx/3.5;
+
+
+	double extxPos = 0;
+	if(extx > 0)
+	{
+		extxPos = xPos2 + extx;
+		pRight2 = extxPos + cx/3.5;
+	}
+	else if(extx < 0)
+	{
+		extxPos = xPos2 + extx;
+		pLeft2 = extxPos - cx/3.5;
+	}
+
+	if((pRight2 > pLeft && pLeft2 < pLeft) || (pLeft2 < pRight && pRight2 > pRight))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+
+int Kick1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2,
+		double extx)
+{
+	float cx = pSprite1.xres/8.0;
+	//float cy = pSprite1.yres;
+
+	double pRight = xPos + cx/3.5;
+	double pLeft = xPos - cx/3.5;
+
+	double extxPos = 0;
+	if(extx > 0)
+	{
+		extxPos = xPos + extx;
+		pRight = extxPos + cx/3.5;
+	}
+	else if(extx < 0)
+	{
+		extxPos = xPos + extx;
+		pLeft = extxPos - cx/3.5;
+	}
+
+	double pRight2 = xPos2 + cx/3.5;
+	double pLeft2 = xPos2 - cx/3.5;
+
+	if((pRight > pLeft2 && pLeft < pLeft2) || (pLeft < pRight2 && pRight > pRight2))
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int Kick2(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1, sprite pSprite2,
+		double extx)
+{
+	float cx = pSprite1.xres/8.0;
+	//float cy = pSprite1.yres;
+
+	double pRight = xPos + cx/3.5;
+	double pLeft = xPos - cx/3.5;
+	double pRight2 = xPos2 + cx/3.5;
+	double pLeft2 = xPos2 - cx/3.5;
+
+
+	double extxPos = 0;
+	if(extx > 0)
+	{
+		extxPos = xPos2 + extx;
+		pRight2 = extxPos + cx/3.5;
+	}
+	else if(extx < 0)
+	{
+		extxPos = xPos2 + extx;
+		pLeft2 = extxPos - cx/3.5;
+	}
 
 	if((pRight > pLeft2 && pLeft < pLeft2) || (pLeft < pRight2 && pRight > pRight2))
 	{

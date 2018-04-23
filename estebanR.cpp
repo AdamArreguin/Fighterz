@@ -61,7 +61,7 @@ void showControls(int x, int y, int i)
     }
 }
 
-void healthBarOverlay(int x, int y) 
+void healthBarOverlay(int x, int y, int health) 
 {
     glPushMatrix();
     glTranslatef(x*.5 - 500, y-40, 1.0f);
@@ -70,10 +70,16 @@ void healthBarOverlay(int x, int y)
     glBegin(GL_QUADS);
         glColor3ub(195, 195, 0);
         //Increment x when decreasing health
-        glVertex2f(0,0);
+	// 0 health = 490
+	if(health > 490)
+	{
+		health = 490;
+	}
+        glVertex2f(health,0);
         glColor3ub(255, 255, 0);
         //Increment x when decreasing health
-        glVertex2f(0,40);
+	// 0 health = 490
+        glVertex2f(health,40);
         glColor3ub(255, 255, 0);
         glVertex2f(500,40);
         glColor3ub(195, 195, 0);
