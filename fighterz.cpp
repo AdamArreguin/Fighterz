@@ -15,8 +15,10 @@ class Global {
 	public:
 		int xres, yres;
 		float gravity;
-		int keyHeldr;
-		int keyHeldf;
+		int keyHeldr1;
+		int keyHeldf1;
+		int keyHeldr2;
+		int keyHeldf2;
 		char keys[65536];
 		int mx, my;
 		int menu[2];
@@ -32,8 +34,10 @@ class Global {
 			yres = 720;
 			gravity = 1.5;
 			memset(keys, 0, 65536);
-			keyHeldr = 0;
-			keyHeldf = 0;
+			keyHeldr1 = 0;
+			keyHeldf1 = 0;
+			keyHeldr2 = 0;
+			keyHeldf2 = 0;
 			posFlag = 1;
 			menu[0] = 790;
 			menu[1] = 490;
@@ -382,12 +386,12 @@ int check_keys(XEvent *e)
 		shift=1;
 		return 0;
 	}
-	if (gl.keyHeldr == 1 && e->type == KeyRelease){
-		gl.keyHeldr =0;
-	}
-	if (gl.keyHeldf == 1 && e->type == KeyRelease){
-		gl.keyHeldf =0;
-	}
+	//if (gl.keyHeldr == 1 && e->type == KeyRelease){
+	//	gl.keyHeldr =0;
+	//}
+	//if (gl.keyHeldf == 1 && e->type == KeyRelease){
+	//	gl.keyHeldf =0;
+	//}
 
 	(void)shift;
 	switch (key) {
@@ -513,7 +517,7 @@ void physics()
 			player.pos[0] -= 10;
 		}
 	}
-	if (gl.keys[XK_r]/*&& gl.keyHeldr == 0*/)
+	if (gl.keys[XK_r] && gl.keyHeldr1 == 0)
 	{ 
 		//check if a second has passed
 		//if(gl.secpas == 1)
@@ -544,13 +548,13 @@ void physics()
 			player.animationState = 1;
 			//gl.secpas = 0;
 		//} 
+		gl.keyHeldr1 = 1;
 	}
 	//gl.keyHeldr = 1;
 
-	if (!gl.keys[XK_r] /*&& gl.keyHeldr == 1*/)
+	if (!gl.keys[XK_r] && gl.keyHeldr1 == 1)
 	{
-
-		//gl.keyHeldr = 0;
+		gl.keyHeldr1 = 0;
 	} 
 	if (gl.keys[XK_f] /*&& gl.keyHeldf == 0*/)
 	{
@@ -583,12 +587,12 @@ void physics()
 			//gl.secpas = 0;
 		//} 
 
-		//gl.keyHeldf = 1;
+		gl.keyHeldf1 = 1;
 	}
 	if (!gl.keys[XK_f] /*&& gl.keyHeldf == 1*/)
 	{
 
-		//gl.keyHeldf = 0;
+		gl.keyHeldf1 = 0;
 	}
 
 
@@ -639,7 +643,7 @@ void physics()
 			player2.pos[0] -= 10;
 		}
 	}
-	if (gl.keys[XK_Shift_R] /*&& gl.keyHeldr == 0*/)
+	if (gl.keys[XK_Shift_R] && gl.keyHeldr2 == 0)
 	{
 
 		//if(gl.secpas == 1)
@@ -670,14 +674,14 @@ void physics()
 			player2.animationState = 2;
 			//gl.secpas = 0;
 		//} 
-		//gl.keyHeldr = 1;
+		gl.keyHeldr2 = 1;
 	}
 	if (!gl.keys[XK_Shift_R] /*&& gl.keyHeldr == 1*/)
 	{
 
-		//gl.keyHeldr = 0;
+		gl.keyHeldr2 = 0;
 	} 
-	if (gl.keys[XK_Return] /*&& gl.keyHeldf == 0*/)
+	if (gl.keys[XK_Return] && gl.keyHeldf2 == 0)
 	{
 		//if(gl.secpas == 1)
 		//{
@@ -707,12 +711,12 @@ void physics()
 			player2.animationState = 1;
 			//gl.secpas = 0;
 		//
-		//gl.keyHeldf = 1;
+		gl.keyHeldf2 = 1;
 	}
 	if (!gl.keys[XK_Return] /*&& gl.keyHeldf == 1*/)
 	{
 
-		//gl.keyHeldf = 0;
+		gl.keyHeldf2 = 0;
 	} 
 
 	//nudge player if colliding
