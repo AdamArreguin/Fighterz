@@ -525,8 +525,8 @@ void physics()
 						player.sp,player2.sp, 5);
 				if (Punchval == 1 && player2.pos[1] < 700)
 				{
-					player2.vel[0] += 10;
-					player2.vel[1] += 10;
+					player2.vel[0] = 10;
+					player2.vel[1] = 10;
 					player2.punchedState = 1;
 				}
 			}
@@ -536,8 +536,8 @@ void physics()
 						player.sp,player2.sp, -5);
 				if(Punchval == 1 && player2.pos[1] < 700)
 				{
-					player2.vel[0] -= 10;
-					player2.vel[1] += 10;
+					player2.vel[0] = -10;
+					player2.vel[1] = 10;
 					player2.punchedState = 1;
 				}
 			}
@@ -563,8 +563,8 @@ void physics()
 						player.sp,player2.sp, 5);
 				if (Kickval == 1)
 				{
-					player2.vel[0] += 10;
-					player2.vel[1] += 10;
+					player2.vel[0] = 10;
+					player2.vel[1] = 10;
 					player2.kickedState = 1;
 				}
 			}
@@ -574,8 +574,8 @@ void physics()
 						player.sp,player2.sp, -5);
 				if(Kickval == 1)
 				{
-					player2.vel[0] -= 10;
-					player2.vel[1] += 10;
+					player2.vel[0] = -10;
+					player2.vel[1] = 10;
 					player2.kickedState = 1;
 				}
 			}
@@ -651,8 +651,8 @@ void physics()
 						player.sp,player2.sp, 5);
 				if (Kickval == 1)
 				{
-					player.vel[0] += 10;
-					player.vel[1] += 10;
+					player.vel[0] = 10;
+					player.vel[1] = 10;
 					player.kickedState = 1;
 				}
 			}
@@ -662,8 +662,8 @@ void physics()
 						player.sp,player2.sp, -5);
 				if(Kickval == 1)
 				{
-					player.vel[0] -= 10;
-					player.vel[1] += 10;
+					player.vel[0] = -10;
+					player.vel[1] = 10;
 					player.kickedState = 1;
 				}
 			}
@@ -688,8 +688,8 @@ void physics()
 						player.sp,player2.sp, 5);
 				if (Punchval == 1)
 				{
-					player.vel[0] += 10;
-					player.vel[1] += 10;
+					player.vel[0] = 10;
+					player.vel[1] = 10;
 					player.punchedState = 1;
 				}
 			}
@@ -699,8 +699,8 @@ void physics()
 						player.sp,player2.sp, -5);
 				if(Punchval == 1)
 				{
-					player.vel[0] -= 10;
-					player.vel[1] += 10;
+					player.vel[0] = -10;
+					player.vel[1] = 10;
 					player.punchedState = 1;
 				}
 			}
