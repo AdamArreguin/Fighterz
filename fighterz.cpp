@@ -433,7 +433,7 @@ void physics()
 	//update player2 velocity when puched
 	if(player2.vel[0] > 0)
 	{
-		player2.vel[0] -= 0.3;
+		player2.vel[0] -= 1.5;
 
 		if(player2.vel[0] < 0)
 		{
@@ -443,7 +443,7 @@ void physics()
 
 	if(player2.vel[0] < 0)
 	{
-		player2.vel[0] += 0.3;
+		player2.vel[0] += 1.5;
 
 		if(player2.vel[0] > 0)
 		{
@@ -453,7 +453,7 @@ void physics()
 
 	if(player.vel[0] > 0)
 	{
-		player.vel[0] -= 0.3;
+		player.vel[0] -= 1.5;
 
 		if(player.vel[0] < 0)
 		{
@@ -463,7 +463,7 @@ void physics()
 
 	if(player.vel[0] < 0)
 	{
-		player.vel[0] += 0.3;
+		player.vel[0] += 01.5;
 
 		if(player.vel[0] > 0)
 		{
@@ -523,9 +523,10 @@ void physics()
 			{
 				Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, 5);
-				if (Punchval == 1)
+				if (Punchval == 1 && player2.pos[1] < 700)
 				{
-					player2.vel[0] = 10;
+					player2.vel[0] += 10;
+					player2.vel[1] += 10;
 					player2.punchedState = 1;
 				}
 			}
@@ -533,9 +534,10 @@ void physics()
 			{
 				Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, -5);
-				if(Punchval == 1)
+				if(Punchval == 1 && player2.pos[1] < 700)
 				{
-					player2.vel[0] = -10;
+					player2.vel[0] -= 10;
+					player2.vel[1] += 10;
 					player2.punchedState = 1;
 				}
 			}
@@ -562,6 +564,7 @@ void physics()
 				if (Kickval == 1)
 				{
 					player2.vel[0] += 10;
+					player2.vel[1] += 10;
 					player2.kickedState = 1;
 				}
 			}
@@ -572,6 +575,7 @@ void physics()
 				if(Kickval == 1)
 				{
 					player2.vel[0] -= 10;
+					player2.vel[1] += 10;
 					player2.kickedState = 1;
 				}
 			}
@@ -648,6 +652,7 @@ void physics()
 				if (Kickval == 1)
 				{
 					player.vel[0] += 10;
+					player.vel[1] += 10;
 					player.kickedState = 1;
 				}
 			}
@@ -658,6 +663,7 @@ void physics()
 				if(Kickval == 1)
 				{
 					player.vel[0] -= 10;
+					player.vel[1] += 10;
 					player.kickedState = 1;
 				}
 			}
@@ -683,6 +689,7 @@ void physics()
 				if (Punchval == 1)
 				{
 					player.vel[0] += 10;
+					player.vel[1] += 10;
 					player.punchedState = 1;
 				}
 			}
@@ -693,6 +700,7 @@ void physics()
 				if(Punchval == 1)
 				{
 					player.vel[0] -= 10;
+					player.vel[1] += 10;
 					player.punchedState = 1;
 				}
 			}

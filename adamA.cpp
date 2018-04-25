@@ -71,8 +71,10 @@ int Punch1(double xPos, double yPos, double xPos2, double yPos2, sprite &pSprite
 		double extx)
 {
 	float cx = pSprite1.xres/8.0;
-	//float cy = pSprite1.yres;
+//	float cy = pSprite1.yres/8.0;
 
+	double pTop = yPos + 100;
+	double pBot2 = yPos2;
 	double pRight = xPos + cx/3.5;
 	double pLeft = xPos - cx/3.5;
 
@@ -91,7 +93,7 @@ int Punch1(double xPos, double yPos, double xPos2, double yPos2, sprite &pSprite
 	double pRight2 = xPos2 + cx/3.5;
 	double pLeft2 = xPos2 - cx/3.5;
 
-	if((pRight > pLeft2 && pLeft < pLeft2) || (pLeft < pRight2 && pRight > pRight2))
+	if((pRight > pLeft2 && pLeft < pLeft2 && pTop > pBot2) || (pLeft < pRight2 && pRight > pRight2 && pTop > pBot2))
 	{
 		return 1;
 	}
@@ -107,6 +109,8 @@ int Punch2(double xPos, double yPos, double xPos2, double yPos2, sprite &pSprite
 	float cx = pSprite1.xres/8.0;
 	//float cy = pSprite1.yres;
 
+	double pTop2 = yPos2 +100;
+	double pBot = yPos;
 	double pRight = xPos + cx/3.5;
 	double pLeft = xPos - cx/3.5;
 	double pRight2 = xPos2 + cx/3.5;
@@ -125,7 +129,7 @@ int Punch2(double xPos, double yPos, double xPos2, double yPos2, sprite &pSprite
 		pLeft2 = extxPos - cx/3.5;
 	}
 
-	if((pRight2 > pLeft && pLeft2 < pLeft) || (pLeft2 < pRight && pRight2 > pRight))
+	if((pRight2 > pLeft && pLeft2 < pLeft && pTop2 > pBot) || (pLeft2 < pRight && pRight2 > pRight && pTop2 > pBot))
 	{
 		return 1;
 	}
@@ -141,6 +145,8 @@ int Kick1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1,
 {
 	float cx = pSprite1.xres/8.0;
 	//float cy = pSprite1.yres;
+	double pTop = yPos + 100;
+	double pBot2 = yPos2;
 
 	double pRight = xPos + cx/3.5;
 	double pLeft = xPos - cx/3.5;
@@ -160,7 +166,7 @@ int Kick1(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1,
 	double pRight2 = xPos2 + cx/3.5;
 	double pLeft2 = xPos2 - cx/3.5;
 
-	if((pRight > pLeft2 && pLeft < pLeft2) || (pLeft < pRight2 && pRight > pRight2))
+	if((pRight > pLeft2 && pLeft < pLeft2 && pTop > pBot2) || (pLeft < pRight2 && pRight > pRight2 && pTop > pBot2))
 	{
 		return 1;
 	}
@@ -176,6 +182,8 @@ int Kick2(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1,
 	float cx = pSprite1.xres/8.0;
 	//float cy = pSprite1.yres;
 
+	double pTop2 = yPos2 +100;
+	double pBot = yPos;
 	double pRight = xPos + cx/3.5;
 	double pLeft = xPos - cx/3.5;
 	double pRight2 = xPos2 + cx/3.5;
@@ -194,7 +202,7 @@ int Kick2(double xPos, double yPos, double xPos2, double yPos2, sprite pSprite1,
 		pLeft2 = extxPos - cx/3.5;
 	}
 
-	if((pRight > pLeft2 && pLeft < pLeft2) || (pLeft < pRight2 && pRight > pRight2))
+	if((pRight > pLeft2 && pLeft < pLeft2 && pTop2 > pBot) || (pLeft < pRight2 && pRight > pRight2 && pTop2 > pBot))
 	{
 		return 1;
 	}
