@@ -217,9 +217,9 @@ extern void spriteRender(sprite,double, double, double);
 extern int spritePunch(sprite&, int, int, Timers&);
 extern int spriteKick(sprite&, int, int, Timers&);
 extern void checkPosition(sprite&, sprite&, double, double, int&, int&, int&);
-extern int Punch1(double, double,double, double, sprite, sprite, double);
+extern int Punch1(double, double,double, double, sprite&, sprite&, double);
 extern int Kick1(double, double,double, double, sprite, sprite, double);
-extern int Punch2(double, double,double, double, sprite, sprite, double);
+extern int Punch2(double, double,double, double, sprite&, sprite&, double);
 extern int Kick2(double, double,double, double, sprite, sprite, double);
 
 
@@ -476,7 +476,8 @@ void physics()
 
 	//Check for collision with window edges
 	if (player.pos[0] < 15) {
-		player.pos[0] = 15;
+		player.pos[0] = 20;
+		player.vel[0] = 0;
 	}
 	if (player.pos[0] > 1235) {
 		player.pos[0] = 1235;
@@ -524,7 +525,7 @@ void physics()
 						player.sp,player2.sp, 5);
 				if (Punchval == 1)
 				{
-					player2.vel[0] += 10;
+					player2.vel[0] = 10;
 					player2.punchedState = 1;
 				}
 			}
@@ -534,7 +535,7 @@ void physics()
 						player.sp,player2.sp, -5);
 				if(Punchval == 1)
 				{
-					player2.vel[0] -= 10;
+					player2.vel[0] = -10;
 					player2.punchedState = 1;
 				}
 			}
@@ -597,9 +598,11 @@ void physics()
 	//Check for collision with window edges
 	if (player2.pos[0] < 15) {
 		player2.pos[0] = 15;
+		player2.vel[0] = 0;
 	}
 	if (player2.pos[0] > 1235) {
 		player2.pos[0] = 1235;
+		player2.vel[0] = 0;
 	}
 	if (player2.pos[1] < 70) {
 		player2.pos[1] += (float)gl.yres;
@@ -750,7 +753,8 @@ void render()
 		displayName(P1, 900, 1);
 		displayName(P2, 900, 2);
 		const char* SC = "Scores :";
-		if(PROFILING_ON !=0){
+		if(PROFILING_ON !=0)
+		{
 			displayScore(SC,800,1);
 			displayScoreOpt(SC,800,1);
 		}
@@ -772,41 +776,51 @@ void render()
 
 
 		checkPosition(player.sp, player2.sp, player.pos[0], player2.pos[0], gl.posFlag, player.positionState, player2.positionState);
-		if (player.animationState == 1) {
-			if(player.positionState == 1) {
+		if (player.animationState == 1) 
+		{
+			if(player.positionState == 1) 
+			{
 				// return player.animation state back to 0 after spritePunch();
 				player.animationState = spritePunch(player.sp,0,3, player.timers);
 			}
-			else if( player.positionState == 2) {
+			else if( player.positionState == 2) 
+			{
 				player.animationState = spritePunch(player.sp, 8,11, player.timers);
 			} 
 		}
 
-		if (player2.animationState == 1) {
-			if (player2.positionState == 2) {
+		if (player2.animationState == 1) 
+		{
+			if (player2.positionState == 2) 
+			{
 				// return player.animation state back to 0 after spritePunch(); 
 				player2.animationState = spritePunch(player2.sp,8,11,player2.timers2);
 			}
-			else if (player2.positionState == 1) {
+			else if (player2.positionState == 1) 
+			{
 				player2.animationState = spritePunch(player2.sp,0,3, player2.timers2);
 			} 
 
 		}
 
-		if (player.animationState == 2) {
+		if (player.animationState == 2) 
+		{
 			// return player.animation state back to 0 after spriteKick();
 			if(player.positionState == 1)
 				player.animationState = spriteKick(player.sp, 4, 7,player.timers);
-			else if( player.positionState == 2) {
+			else if( player.positionState == 2) 
+			{
 				player.animationState = spriteKick(player.sp, 12,15,player.timers);
 			} 
 		}
 
-		if (player2.animationState == 2) {
+		if (player2.animationState == 2) 
+		{
 			// return player.animation state back to 0 after spriteKick();
 			if (player2.positionState == 2)
 				player2.animationState = spriteKick(player2.sp,12,15,player2.timers2);
-			else if (player2.positionState == 1) {
+			else if (player2.positionState == 1) 
+			{
 				player2.animationState = spriteKick(player2.sp,4,7,player2.timers2);
 			} 
 		}
@@ -827,7 +841,7 @@ void render()
 		if(player2.punchedState == 1)
 		{
 			player2.health2 -= 15;
-		}else if(player2.kickedState == 1)
+		} else if(player2.kickedState == 1)
 		{
 			player2.health2 -= 20;
 		}
@@ -835,7 +849,7 @@ void render()
 		if(player.punchedState == 1)
 		{
 			player.health1 += 15;
-		}else if(player.kickedState == 1)
+		} else if(player.kickedState == 1)
 		{
 			player.health1 += 20;
 		}
