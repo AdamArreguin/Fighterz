@@ -556,7 +556,7 @@ void physics()
 	{
 		gl.keyHeldr1 = 0;
 	} 
-	if (gl.keys[XK_f] /*&& gl.keyHeldf == 0*/)
+	if (gl.keys[XK_f] && gl.keyHeldf1 == 0)
 	{
 		//if(gl.secpas == 1)
 		//{
@@ -589,7 +589,7 @@ void physics()
 
 		gl.keyHeldf1 = 1;
 	}
-	if (!gl.keys[XK_f] /*&& gl.keyHeldf == 1*/)
+	if (!gl.keys[XK_f] && gl.keyHeldf1 == 1)
 	{
 
 		gl.keyHeldf1 = 0;
@@ -720,20 +720,20 @@ void physics()
 	} 
 
 	//nudge player if colliding
-	if(player.collisionState == true && (player.pos[0] < player2.pos[0]))
+	if(player.collisionState == true && (player.pos[0] < player2.pos[0]) && (player.pos[1] == player2.pos[1]))
 	{
 		player.pos[0] -= 1;
 	}
-	else if (player.collisionState == true && (player.pos[0] > player2.pos[0]))
+	else if (player.collisionState == true && (player.pos[0] > player2.pos[0]) && (player.pos[1] == player2.pos[1]))
 	{
 		player.pos[0] += 1;
 	}
 
-	if(player2.collisionState == true && (player2.pos[0] < player.pos[0]))
+	if(player2.collisionState == true && (player2.pos[0] < player.pos[0]) && (player.pos[1] == player2.pos[1]))
 	{
 		player2.pos[0] -= 1;
 	}
-	else if (player2.collisionState == true && (player2.pos[0] > player.pos[0]))
+	else if (player2.collisionState == true && (player2.pos[0] > player.pos[0]) && (player.pos[1] == player2.pos[1]))
 	{
 		player2.pos[0] += 1;
 	}	
