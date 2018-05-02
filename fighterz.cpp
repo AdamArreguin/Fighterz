@@ -216,7 +216,7 @@ extern void displayName(const char*, int, int);
 extern void displayScore(const char*, int,int);
 extern void displayScoreOpt(const char*, int, int);
 extern void controls (int, int, const char*);
-extern void initSprite(sprite&);
+extern void initSprite(sprite&, sprite&);
 extern void spriteRender(sprite,double, double, double);
 extern int spritePunch(sprite&, int, int, Timers&);
 extern int spriteKick(sprite&, int, int, Timers&);
@@ -288,8 +288,7 @@ int main()
 void init_opengl()
 {
 	backGl();
-	initSprite(player.sp);
-	initSprite(player2.sp);
+	initSprite(player.sp, player2.sp);
 	//OpenGL initialization
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
