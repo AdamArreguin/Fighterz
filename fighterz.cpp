@@ -527,7 +527,7 @@ void physics()
 			{
 				Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, 5);
-				if (Punchval == 1 && player2.pos[1] < 700)
+				if (Punchval == 1 && player2.pos[1] < 700 && (player.pos[1] >= player2.pos[1] - 20 && player.pos[1] <= player2.pos[1] + 20))
 				{
 					player2.vel[0] = 10;
 					player2.vel[1] = 10;
@@ -538,7 +538,7 @@ void physics()
 			{
 				Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, -5);
-				if(Punchval == 1 && player2.pos[1] < 700)
+				if(Punchval == 1 && player2.pos[1] < 700 && (player.pos[1] == player2.pos[1]))
 				{
 					player2.vel[0] = -10;
 					player2.vel[1] = 10;
@@ -565,18 +565,18 @@ void physics()
 			{
 				Kickval = Kick1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, 5);
-				if (Kickval == 1)
+				if (Kickval == 1 && (player.pos[1] >= player2.pos[1] - 10 && player.pos[1] <= player2.pos[1] + 20))
 				{
 					player2.vel[0] = 10;
 					player2.vel[1] = 10;
 					player2.kickedState = 1;
 				}
 			}
-			else if (player.pos[0] > player2.pos[0])
+			else if (player.pos[0] > player2.pos[0] && (player.pos[1] == player2.pos[1]))
 			{
 				Kickval = Kick1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, -5);
-				if(Kickval == 1)
+				if(Kickval == 1 && (player.pos[1] <= player2.pos[1] + 10 && player.pos[1] >= player2.pos[1] - 20))
 				{
 					player2.vel[0] = -10;
 					player2.vel[1] = 10;
@@ -653,7 +653,7 @@ void physics()
 			{
 				Kickval = Kick2(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, 5);
-				if (Kickval == 1)
+				if (Kickval == 1 && (player2.pos[1] >= player.pos[1] - 20 && player2.pos[1] <= player.pos[1] +20))
 				{
 					player.vel[0] = 10;
 					player.vel[1] = 10;
@@ -664,7 +664,7 @@ void physics()
 			{
 				Kickval = Kick2(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, -5);
-				if(Kickval == 1)
+				if(Kickval == 1 && (player2.pos[1] >= player.pos[1] - 20 && player2.pos[1] <= player.pos[1] + 20))
 				{
 					player.vel[0] = -10;
 					player.vel[1] = 10;
@@ -690,7 +690,7 @@ void physics()
 			{
 				Punchval = Punch2(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, 5);
-				if (Punchval == 1)
+				if (Punchval == 1 && (player2.pos[1] >= player.pos[1] - 20 && player2.pos[1] <= player.pos[1]))
 				{
 					player.vel[0] = 10;
 					player.vel[1] = 10;
@@ -701,7 +701,7 @@ void physics()
 			{
 				Punchval = Punch2(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
 						player.sp,player2.sp, -5);
-				if(Punchval == 1)
+				if(Punchval == 1 && (player2.pos[1] >= player.pos[1] - 20 && player2.pos[1] <= player.pos[1]))
 				{
 					player.vel[0] = -10;
 					player.vel[1] = 10;
