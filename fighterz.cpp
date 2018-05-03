@@ -238,6 +238,9 @@ extern void drawHealthBar2(int, int);
 extern void healthBarOverlay(int, int, int);
 extern void healthBarOverlay2(int, int, int);
 extern void countdown(int, int);
+
+//
+extern int checkGameOver(int&,int&);
 //==========================================================================
 // M A I N
 //==========================================================================
@@ -869,6 +872,9 @@ void render()
 		player2.kickedState = 0;
 		player.punchedState = 0;
 		player.kickedState = 0;
+
+		gl.STATE = checkGameOver(player.health1, player2.health2);
+		//gl.STATE = checkGameOver(player2.health2);
 
 		healthBarOverlay(gl.xres, gl.yres, player.health1);
 		healthBarOverlay2(gl.xres, gl.yres, player2.health2);

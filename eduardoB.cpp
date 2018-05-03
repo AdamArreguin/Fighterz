@@ -175,4 +175,17 @@ void backgroundRenderTimer(int xres, int yres)
 	}
 }
 
-
+int checkGameOver(int &health1, int &health2)
+{
+    //check if health reaches below 0
+    if(health1 >= 450 || health2 <= 0)
+    {
+	//return health back to original before exiting to menu
+	health1 = 0;
+	health2 = 450;
+	//exit to menu
+	return 0;
+    }
+    else		//if not keep playing the game
+	return 2;
+}
