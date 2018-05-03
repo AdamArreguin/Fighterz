@@ -422,6 +422,8 @@ int check_keys(XEvent *e)
 	    break;
 	case XK_w:
 	    break;
+	case XK_m:
+	    gl.STATE = 0;
     }
     return 0;
 }
@@ -777,6 +779,15 @@ void physics()
 		displayScore(SC,800,1);
 		displayScoreOpt(SC,800,1);
 	    }
+
+	    //display menu text
+	    Rect rm;
+	    rm.bot = gl.yres/1.2;
+	    rm.left = gl.xres/2;
+	    ggprint16(&rm, 32, 0x00ffffff, "Press 'm' for Main Menu");
+	    rm.bot-= 10;
+	    ggprint16(&rm, 32, 0x00ffffff, "Pres 'esc' to quit");
+
 	    /*
 	     * Commenting out for clean look and used when we create
 	     * a main menu
