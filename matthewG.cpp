@@ -91,7 +91,7 @@ void funcTimer(const char *t)
 	ggprint16(&r, 8, 0x00ffff00, t);
 }
 
-void spriteRender(sprite sp,double xPos, double yPos, double zPos) 
+void spriteRender(sprite sp,double xPos, double yPos, double zPos, float rotation) 
 {
 	clock_t timer;
 	timer = clock();
@@ -109,6 +109,7 @@ void spriteRender(sprite sp,double xPos, double yPos, double zPos)
 	float tx = (float)ix / 16.0;
 	float ty = (float)iy;
 	glTranslatef(xPos, yPos, zPos);
+	glRotatef(rotation,0.0f,0.0f,1.0f);
 	glBegin(GL_QUADS);
 		glTexCoord2f(tx, ty+1.0); glVertex2i(0, 0);
 		glTexCoord2f(tx, ty); glVertex2i(0, cy+96);
