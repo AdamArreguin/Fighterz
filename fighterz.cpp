@@ -433,6 +433,7 @@ int check_keys(XEvent *e)
 	    break;
 	case XK_m:
 	    gl.STATE = 0;
+	    break;
     }
     return 0;
 }
@@ -514,6 +515,17 @@ void physics()
 
     //---------------------------------------------------
     //check keys pressed now
+
+
+    //press m for menu
+    if (gl.keys[XK_m])
+    {
+	//if(player.health1 >= 490)
+		player.health1 = 0;
+	//if(player.health2 <= 0)
+		player2.health2 = 450;
+    }
+    //--------------------------------------------------
 
     if (gl.keys[XK_w] && player.pos[1] <= 70)
     {
@@ -800,8 +812,8 @@ void physics()
 }
 }
 
-	void render() 
-	{
+void render() 
+{
     if (gl.STATE == 0 || gl.STATE == 3) {
 		drawMenu(gl.xres, gl.yres);
     } else if (gl.STATE == 1) {
@@ -831,6 +843,16 @@ void physics()
 	    displayScore(SC,800,1);
 	    displayScoreOpt(SC,800,1);
 	}
+
+	//Display keys to press for menu options
+	Rect rm;
+	rm.bot = gl.yres/1.2;
+	rm.left = gl.xres/2;;
+		
+	ggprint16(&rm, 32, 0x00ffffff, "Press 'm' for menu");
+	rm.bot -= 20;
+	ggprint16(&rm, 32, 0x00ffffff, "Press 'esc' to quit game");
+
 	/*
 	 * Commenting out for clean look and used when we create
 	 * a main menu
