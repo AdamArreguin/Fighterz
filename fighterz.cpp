@@ -250,6 +250,8 @@ extern void healthBarOverlay(int, int, int);
 extern void healthBarOverlay2(int, int, int);
 extern void countdown(int, int);
 
+extern void displayText(int, int, const char* ); 
+
 //
 extern int checkGameOver(int&,int&);
 extern int checkPlayerStatus(int, int, Vec, Vec, sprite, sprite);
@@ -534,7 +536,7 @@ void physics()
 
     if (gl.keys[XK_d])
     {
-	if(player.collisionState == false || player.pos[1] > player2.pos[1])
+	if(player.collisionState == false || player.pos[1] > player2.pos[1]+50)
 	{
 	    player.pos[0] += 10;
 
@@ -542,7 +544,7 @@ void physics()
     }
     if (gl.keys[XK_a])
     {
-	if(player.collisionState == false || player.pos[1] > player2.pos[1])
+	if(player.collisionState == false || player.pos[1] > player2.pos[1]+50)
 	{
 	    player.pos[0] -= 10;
 	}
@@ -679,14 +681,14 @@ void physics()
 
     if (gl.keys[XK_Right])
     {
-	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
 	{
 	    player2.pos[0] += 10;
 	}
     }
     if (gl.keys[XK_Left])
     {
-	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
+	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
 	{
 	    player2.pos[0] -= 10;
 	}
@@ -845,13 +847,9 @@ void render()
 	}
 
 	//Display keys to press for menu options
-	Rect rm;
-	rm.bot = gl.yres/1.2;
-	rm.left = gl.xres/2;;
-		
-	ggprint16(&rm, 32, 0x00ffffff, "Press 'm' for menu");
-	rm.bot -= 20;
-	ggprint16(&rm, 32, 0x00ffffff, "Press 'esc' to quit game");
+	
+	displayText(gl.xres/2,gl.yres/1.2,"Press 'm' for menu");
+	displayText(gl.xres/2,gl.yres/1.2 - 30, "Press 'esc' to quit game");
 
 	/*
 	 * Commenting out for clean look and used when we create
