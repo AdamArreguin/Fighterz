@@ -521,7 +521,7 @@ void physics()
 	player2.health2 = 450;
     }
     //--------------------------------------------------
-
+if(player.isDead == false) {
     if (gl.keys[XK_w] && player.pos[1] <= 70)
     {
 	player.vel[1] += 30;
@@ -683,7 +683,7 @@ void physics()
 	gl.keyHeldf1 = 0;
     }
 
-
+}
 
     //update player2 velocity due to gravity
     if (player2.pos[1] > 70)
@@ -720,10 +720,7 @@ void physics()
     {
 	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
 	{
-	    if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
-	    {
 		player2.pos[0] += 7;
-	    }
 	}
 
     }
@@ -731,11 +728,11 @@ void physics()
     {
 	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
 	{
-	    if(player2.collisionState == false || (player2.pos[1] > player.pos[1]))
-	    {
+	    
 		player2.pos[0] -= 7;
-	    }
+	    
 	}
+    }
 	if (gl.keys[XK_Shift_R] && gl.keyHeldr2 == 0 && player2.checkPunchState == 0)
 	{
 	    int Kickval = 0;
@@ -762,6 +759,7 @@ void physics()
 		    }
 		}
 	    }
+	
 	    else if (player.pos[0] < player2.pos[0])
 	    {
 		Kickval = Kick2(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
@@ -879,7 +877,7 @@ void physics()
 	    //player.kickedState = 0;
 	    gl.keyHeldf2 = 0;
 	} 
-
+    }
 	//nudge player if colliding
 	if(player.collisionState == true && (player.pos[0] < player2.pos[0]) && (player.pos[1] == player2.pos[1]))
 	{
@@ -899,8 +897,8 @@ void physics()
 	    player2.pos[0] += 1;
 	}	
     }
-}
-}
+
+
 
 void render() 
 {
