@@ -517,8 +517,10 @@ void physics()
     {
 	//if(player.health1 >= 490)
 	player.health1 = 0;
+	player.isDead = false;
 	//if(player.health2 <= 0)
 	player2.health2 = 450;
+	player2.isDead = false;
     }
     //--------------------------------------------------
 if(player.isDead == false) {
