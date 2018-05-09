@@ -123,6 +123,16 @@ img {vertical-align: middle;}
     padding: 10px;
 }
 
+4 .fade .content4 {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    right: 25%;
+    color: #f1f1f1;
+    width: 100%;
+    padding: 10px; 
+}
+
 
 div.box {
     box-sizing: border-box;
@@ -136,11 +146,18 @@ div.box {
 div.box2 {
     box-sizing: border-box;
     width: 50%;
-    i
+    text-color: black;
     text-align: left;
     padding: 10px;
 }
 
+div.box3 {
+    box-sizing: border-box;
+    width: 60%;
+
+    text-align: left;
+    padding: 10px;
+}
 
 
 @-webkit-keyframes fade {
@@ -197,16 +214,35 @@ div.box2 {
 
 <div class="mySlides fade">
   <div class="numbertext">3 / 10</div>
-  <img src="seamless_background.jpg" style="width:100%">
-  <div class="content"><h1>Controls</h1>
-   </div>
-
+  <img src="game.png" style="width:100%">
+  <div class="content2"><div class="box3"><h1>Controls for Player 1</h1>
+  <h2><ul>
+      <li>White Character</li>
+      <li>-------------------</li>
+      <li>Key "A" = Backwards</li>
+      <li>Key "D" = Forward</li>
+      <li>Key "W" = Jump</li>
+      <li>Key "R" = Punch</li>
+      <li>Key "F" = Kick</li>
+      </h2></div>
+  </div> 
 </div>
 
 <div class="mySlides fade">
   <div class="numbertext">4 / 10</div>
-  <img src="seamless_background.jpg" style="width:100%">
-  <div class="content">Game Plan</div>
+  <img src="game.png" style="width:100%">
+  <div class="content2"><div class="box3"><h1 style="color:Tomato;">Controls for Player 2</h1>
+  <h2><ul style="color:Tomato;">
+      <li>Colored Character</li>
+      <li>------------------------</li>
+      <li>Key "&larr;" = Backwards</li>
+      <li>Key "&rarr;" = Forward</li>
+      <li>Key "&uarr;" = Jump</li>
+      <li>Key "Enter" = Punch</li>
+      <li>Key "Shift" = Kick</li>
+</h2>  
+</div>
+  </div> 
 </div>
 
 <div class="mySlides fade">
