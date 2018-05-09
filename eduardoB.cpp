@@ -180,11 +180,11 @@ void backgroundRenderTimer(int xres, int yres)
 int checkGameOver(int &health1, int &health2)
 {
     //check if health reaches below 0
-    if(health1 >= 450)
+    if(health1 >= 490)
     {
 	return 1;
     }
-    else if(health2 <= 0)
+    else if(health2 <= -30)
     {
 	return 2;
 
