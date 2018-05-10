@@ -30,7 +30,7 @@ typedef Flt     Matrix[4][4];
 #define VecCopy(a,b) (b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
 #define VecDot(a,b)     ((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
 #define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
-                             (c)[1]=(a)[1]-(b)[1]; \
+			     (c)[1]=(a)[1]-(b)[1]; \
 (c)[2]=(a)[2]-(b)[2]
 
 #define PROFILING_ON false
@@ -43,95 +43,95 @@ const int MAX_BULLETS = 11;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 //image
 class Image {
-public:
-    int width, height;
-    unsigned char *data;
-    ~Image() { delete [] data; }
-    Image(const char *fname) {
-        if (fname[0] == '\0')
-            return;
-        //printf("fname **%s**\n", fname);
-        char name[40];
-        strcpy(name, fname);
-        int slen = strlen(name);
-        name[slen-4] = '\0';
-        //printf("name **%s**\n", name);
-        char ppmname[80];
-        sprintf(ppmname,"%s.ppm", name);
-        //printf("ppmname **%s**\n", ppmname);
-        char ts[100];
-        //system("convert eball.jpg eball.ppm");
-        sprintf(ts, "convert %s %s", fname, ppmname);
-        system(ts);
-        //sprintf(ts, "%s", name);
-        FILE *fpi = fopen(ppmname, "r");
-        if (fpi) {
-            char line[200];
-            fgets(line, 200, fpi);
-            fgets(line, 200, fpi);
-            while (line[0] == '#')
-                fgets(line, 200, fpi);
-            sscanf(line, "%i %i", &width, &height);
-            fgets(line, 200, fpi);
-            //get pixel data
-            int n = width * height * 3;
-            data = new unsigned char[n];
-            for (int i=0; i<n; i++)
-                data[i] = fgetc(fpi);
-            fclose(fpi);
-        } else {
-            printf("ERROR opening image: %s\n",ppmname);
-            exit(0);
-        }
-        unlink(ppmname);
-    }
+    public:
+	int width, height;
+	unsigned char *data;
+	~Image() { delete [] data; }
+	Image(const char *fname) {
+	    if (fname[0] == '\0')
+		return;
+	    //printf("fname **%s**\n", fname);
+	    char name[40];
+	    strcpy(name, fname);
+	    int slen = strlen(name);
+	    name[slen-4] = '\0';
+	    //printf("name **%s**\n", name);
+	    char ppmname[80];
+	    sprintf(ppmname,"%s.ppm", name);
+	    //printf("ppmname **%s**\n", ppmname);
+	    char ts[100];
+	    //system("convert eball.jpg eball.ppm");
+	    sprintf(ts, "convert %s %s", fname, ppmname);
+	    system(ts);
+	    //sprintf(ts, "%s", name);
+	    FILE *fpi = fopen(ppmname, "r");
+	    if (fpi) {
+		char line[200];
+		fgets(line, 200, fpi);
+		fgets(line, 200, fpi);
+		while (line[0] == '#')
+		    fgets(line, 200, fpi);
+		sscanf(line, "%i %i", &width, &height);
+		fgets(line, 200, fpi);
+		//get pixel data
+		int n = width * height * 3;
+		data = new unsigned char[n];
+		for (int i=0; i<n; i++)
+		    data[i] = fgetc(fpi);
+		fclose(fpi);
+	    } else {
+		printf("ERROR opening image: %s\n",ppmname);
+		exit(0);
+	    }
+	    unlink(ppmname);
+	}
 };
 
 
 class SpriteTexture {
     public:
-        Image *spriteImage;
-        GLuint spriteTexture;
-        
-        float xc[2];
-        float yc[2];
+	Image *spriteImage;
+	GLuint spriteTexture;
+
+	float xc[2];
+	float yc[2];
 };
 
 class sprite {
     public:
-        int xres, yres;
-        SpriteTexture spTex;
-        int spriteFrame;
-        double kickDelay;
-        double punchDelay;
-        sprite() {
-            xres= 1024, yres= 64;
-            spriteFrame=0;
-            punchDelay = 0.075;
-            kickDelay = 0.09;
-        }
+	int xres, yres;
+	SpriteTexture spTex;
+	int spriteFrame;
+	double kickDelay;
+	double punchDelay;
+	sprite() {
+	    xres= 1024, yres= 64;
+	    spriteFrame=0;
+	    punchDelay = 0.075;
+	    kickDelay = 0.09;
+	}
 };
 class Timers {
-public:
-    double physicsRate;
-    double oobillion;
-    struct timespec timeStart, timeEnd, timeCurrent;
-    struct timespec animationTime;
-    struct timespec animationTime2;
-    Timers() {
-        physicsRate = 1.0 / 30.0;
-        oobillion = 1.0 / 1e9;
-    }
-    double timeDiff(struct timespec *start, struct timespec *end) {
-        return (double)(end->tv_sec - start->tv_sec ) +
-                (double)(end->tv_nsec - start->tv_nsec) * oobillion;
-    }
-    void timeCopy(struct timespec *dest, struct timespec *source) {
-        memcpy(dest, source, sizeof(struct timespec));
-    }
-    void recordTime(struct timespec *t) {
-        clock_gettime(CLOCK_REALTIME, t);
-    }
+    public:
+	double physicsRate;
+	double oobillion;
+	struct timespec timeStart, timeEnd, timeCurrent;
+	struct timespec animationTime;
+	struct timespec animationTime2;
+	Timers() {
+	    physicsRate = 1.0 / 30.0;
+	    oobillion = 1.0 / 1e9;
+	}
+	double timeDiff(struct timespec *start, struct timespec *end) {
+	    return (double)(end->tv_sec - start->tv_sec ) +
+		(double)(end->tv_nsec - start->tv_nsec) * oobillion;
+	}
+	void timeCopy(struct timespec *dest, struct timespec *source) {
+	    memcpy(dest, source, sizeof(struct timespec));
+	}
+	void recordTime(struct timespec *t) {
+	    clock_gettime(CLOCK_REALTIME, t);
+	}
 };
 
 //external functions
