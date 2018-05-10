@@ -52,11 +52,11 @@ void showControls(int x, int y, int i)
         case 2:
             displayText(x, y-100, "PLAYER 2");
             displayText(x, y-125, "-------------");
-            displayText(x, y-150, "JUMP: W");
-            displayText(x, y-175, "LEFT: A");
-            displayText(x, y-200, "RIGHT: D");
-            displayText(x, y-225, "PUNCH: R");
-            displayText(x, y-250, "KICK: F");
+            displayText(x, y-150, "JUMP: ^");
+            displayText(x, y-175, "LEFT: <");
+            displayText(x, y-200, "RIGHT: >");
+            displayText(x, y-225, "PUNCH: ENTER");
+            displayText(x, y-250, "KICK: R. SHIFT");
             break;
     }
 }
