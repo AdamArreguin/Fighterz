@@ -523,169 +523,169 @@ void physics()
 	player2.isDead = false;
     }
     //--------------------------------------------------
-if(player.isDead == false) {
-    if (gl.keys[XK_w] && player.pos[1] <= 70)
-    {
-	player.vel[1] += 30;
-    }
-
-    if (gl.keys[XK_d])
-    {
-	if(player.collisionState == false || player.pos[1] > player2.pos[1]+50)
+    if(player.isDead == false) {
+	if (gl.keys[XK_w] && player.pos[1] <= 70)
 	{
-	    player.pos[0] += 7;
-
+	    player.vel[1] += 30;
 	}
-    }
-    if (gl.keys[XK_a])
-    {
-	if(player.collisionState == false || player.pos[1] > player2.pos[1]+50)
+
+	if (gl.keys[XK_d])
 	{
-	    player.pos[0] -= 7;
-	}
-    }
-    if (gl.keys[XK_r] && gl.keyHeldr1 == 0 && player.checkPunchState == 0)
-    {
-	int Punchval = 0;
-	if(player.pos[0] < player2.pos[0])
-	{
-	    Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
-		    player.sp,player2.sp, 5);
-	    if (Punchval == 1 && player2.pos[1] < 700 && (player.pos[1] >= player2.pos[1] - 20 && player.pos[1] <= player2.pos[1] + 20))
+	    if(player.collisionState == false || player.pos[1] > player2.pos[1]+50)
 	    {
-		if(player.punchCounter == 2)
-		{
-		    player2.vel[0] = 20;
-		    player2.vel[1] = 15;
-		    player2.punchedState = 2;
-		    player.punchCounter++;
-		}
-		else
-		{
-		    player2.vel[0] = 10;
-		    player2.vel[1] = 10;
-		    player2.punchedState = 1;
-		    player.punchCounter++;
+		player.pos[0] += 7;
 
-		}
 	    }
 	}
-	else if (player.pos[0] > player2.pos[0])
+	if (gl.keys[XK_a])
 	{
-	    Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
-		    player.sp,player2.sp, -5);
-	    if(Punchval == 1 && player2.pos[1] < 700 && (player.pos[1] == player2.pos[1]))
+	    if(player.collisionState == false || player.pos[1] > player2.pos[1]+50)
 	    {
-		if(player.punchCounter == 2)
-		{
-		    player2.vel[0] = -20;
-		    player2.vel[1] = 15;
-		    player2.punchedState = 2;
-		    player.punchCounter++;
-		}
-		else
-		{
-		    player2.vel[0] = -10;
-		    player2.vel[1] = 10;
-		    player2.punchedState = 1;
-		    player.punchCounter++;
-
-		}
+		player.pos[0] -= 7;
 	    }
 	}
-	player2.checkPunchState = 1;
-	player2.checkKickState = 1;
-	player2.punchCounter = 0;
-	player2.kickCounter = 0;
-	player.animationState = 1;
-
-	if(player.punchCounter == 3)
+	if (gl.keys[XK_r] && gl.keyHeldr1 == 0 && player.checkPunchState == 0)
 	{
-	    player.checkPunchState = 1;
-	    player.punchCounter = 0;
-	}
-
-	gl.keyHeldr1 = 1;
-
-    }
-
-    if (!gl.keys[XK_r] && gl.keyHeldr1 == 1)
-    {
-	//player2.kickedState = 0;
-	//player2.punchedState = 0;
-	gl.keyHeldr1 = 0;
-    } 
-    if (gl.keys[XK_f] && gl.keyHeldf1 == 0 && player.checkKickState == 0)
-    {
-	int Kickval = 0;
-	if(player.pos[0] < player2.pos[0])
-	{
-	    Kickval = Kick1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
-		    player.sp,player2.sp, 5);
-	    if (Kickval == 1 && (player.pos[1] >= player2.pos[1] - 10 && player.pos[1] <= player2.pos[1] + 20))
+	    int Punchval = 0;
+	    if(player.pos[0] < player2.pos[0])
 	    {
-		if(player.kickCounter == 1)
+		Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+			player.sp,player2.sp, 5);
+		if (Punchval == 1 && player2.pos[1] < 700 && (player.pos[1] >= player2.pos[1] - 20 && player.pos[1] <= player2.pos[1] + 20))
 		{
-		    player2.vel[0] = 25;
-		    player2.vel[1] = 15;
-		    player2.kickedState = 2;
-		    player.kickCounter++;
-		}
-		else
-		{
-		    player2.vel[0] = 10;
-		    player2.vel[1] = 10;
-		    player2.kickedState = 1;
-		    player.kickCounter++;
+		    if(player.punchCounter == 2)
+		    {
+			player2.vel[0] = 20;
+			player2.vel[1] = 15;
+			player2.punchedState = 2;
+			player.punchCounter++;
+		    }
+		    else
+		    {
+			player2.vel[0] = 10;
+			player2.vel[1] = 10;
+			player2.punchedState = 1;
+			player.punchCounter++;
 
+		    }
 		}
 	    }
-	}
-	else if (player.pos[0] > player2.pos[0] && (player.pos[1] == player2.pos[1]))
-	{
-	    Kickval = Kick1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
-		    player.sp,player2.sp, -5);
-	    if(Kickval == 1 && (player.pos[1] <= player2.pos[1] + 10 && player.pos[1] >= player2.pos[1] - 20))
+	    else if (player.pos[0] > player2.pos[0])
 	    {
-		if(player.kickCounter == 1)
+		Punchval = Punch1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+			player.sp,player2.sp, -5);
+		if(Punchval == 1 && player2.pos[1] < 700 && (player.pos[1] == player2.pos[1]))
 		{
-		    player2.vel[0] = -25;
-		    player2.vel[1] = 15;
-		    player2.kickedState = 2;
-		    player.kickCounter++;
-		}
-		else
-		{
-		    player2.vel[0] = -10;
-		    player2.vel[1] = 10;
-		    player2.kickedState = 1;
-		    player.kickCounter++;
+		    if(player.punchCounter == 2)
+		    {
+			player2.vel[0] = -20;
+			player2.vel[1] = 15;
+			player2.punchedState = 2;
+			player.punchCounter++;
+		    }
+		    else
+		    {
+			player2.vel[0] = -10;
+			player2.vel[1] = 10;
+			player2.punchedState = 1;
+			player.punchCounter++;
 
+		    }
 		}
 	    }
-	}
-	player2.checkPunchState = 1;
-	player2.checkKickState = 1;
-	player2.punchCounter = 0;
-	player2.kickCounter = 0;
-	player.animationState = 2;
+	    player2.checkPunchState = 1;
+	    player2.checkKickState = 1;
+	    player2.punchCounter = 0;
+	    player2.kickCounter = 0;
+	    player.animationState = 1;
 
-	if(player.kickCounter == 2)
+	    if(player.punchCounter == 3)
+	    {
+		player.checkPunchState = 1;
+		player.punchCounter = 0;
+	    }
+
+	    gl.keyHeldr1 = 1;
+
+	}
+
+	if (!gl.keys[XK_r] && gl.keyHeldr1 == 1)
 	{
-	    player.checkKickState = 1;
-	    player.kickCounter = 0;
+	    //player2.kickedState = 0;
+	    //player2.punchedState = 0;
+	    gl.keyHeldr1 = 0;
+	} 
+	if (gl.keys[XK_f] && gl.keyHeldf1 == 0 && player.checkKickState == 0)
+	{
+	    int Kickval = 0;
+	    if(player.pos[0] < player2.pos[0])
+	    {
+		Kickval = Kick1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+			player.sp,player2.sp, 5);
+		if (Kickval == 1 && (player.pos[1] >= player2.pos[1] - 10 && player.pos[1] <= player2.pos[1] + 20))
+		{
+		    if(player.kickCounter == 1)
+		    {
+			player2.vel[0] = 25;
+			player2.vel[1] = 15;
+			player2.kickedState = 2;
+			player.kickCounter++;
+		    }
+		    else
+		    {
+			player2.vel[0] = 10;
+			player2.vel[1] = 10;
+			player2.kickedState = 1;
+			player.kickCounter++;
+
+		    }
+		}
+	    }
+	    else if (player.pos[0] > player2.pos[0] && (player.pos[1] == player2.pos[1]))
+	    {
+		Kickval = Kick1(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
+			player.sp,player2.sp, -5);
+		if(Kickval == 1 && (player.pos[1] <= player2.pos[1] + 10 && player.pos[1] >= player2.pos[1] - 20))
+		{
+		    if(player.kickCounter == 1)
+		    {
+			player2.vel[0] = -25;
+			player2.vel[1] = 15;
+			player2.kickedState = 2;
+			player.kickCounter++;
+		    }
+		    else
+		    {
+			player2.vel[0] = -10;
+			player2.vel[1] = 10;
+			player2.kickedState = 1;
+			player.kickCounter++;
+
+		    }
+		}
+	    }
+	    player2.checkPunchState = 1;
+	    player2.checkKickState = 1;
+	    player2.punchCounter = 0;
+	    player2.kickCounter = 0;
+	    player.animationState = 2;
+
+	    if(player.kickCounter == 2)
+	    {
+		player.checkKickState = 1;
+		player.kickCounter = 0;
+	    }
+
+	    gl.keyHeldf1 = 1;
+	}
+	if (!gl.keys[XK_f] && gl.keyHeldf1 == 1)
+	{
+	    //player2.punchedState = 0;
+	    //player2.kickedState = 0;
+	    gl.keyHeldf1 = 0;
 	}
 
-	gl.keyHeldf1 = 1;
     }
-    if (!gl.keys[XK_f] && gl.keyHeldf1 == 1)
-    {
-	//player2.punchedState = 0;
-	//player2.kickedState = 0;
-	gl.keyHeldf1 = 0;
-    }
-
-}
 
     //update player2 velocity due to gravity
     if (player2.pos[1] > 70)
@@ -718,23 +718,23 @@ if(player.isDead == false) {
 	{
 	    player2.vel[1] += 30;
 	}
-    if (gl.keys[XK_Right])
-    {
-	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
+	if (gl.keys[XK_Right])
 	{
+	    if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
+	    {
 		player2.pos[0] += 7;
-	}
+	    }
 
-    }
-    if (gl.keys[XK_Left])
-    {
-	if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
-	{
-	    
-		player2.pos[0] -= 7;
-	    
 	}
-    }
+	if (gl.keys[XK_Left])
+	{
+	    if(player2.collisionState == false || (player2.pos[1] > player.pos[1]+50))
+	    {
+
+		player2.pos[0] -= 7;
+
+	    }
+	}
 	if (gl.keys[XK_Shift_R] && gl.keyHeldr2 == 0 && player2.checkPunchState == 0)
 	{
 	    int Kickval = 0;
@@ -761,7 +761,7 @@ if(player.isDead == false) {
 		    }
 		}
 	    }
-	
+
 	    else if (player.pos[0] < player2.pos[0])
 	    {
 		Kickval = Kick2(player.pos[0],player.pos[1],player2.pos[0],player2.pos[1],
@@ -804,8 +804,8 @@ if(player.isDead == false) {
 
 	if (!gl.keys[XK_Shift_R])
 	{
-	   // player.punchedState = 0;
-	   // player.kickedState = 0;
+	    // player.punchedState = 0;
+	    // player.kickedState = 0;
 	    gl.keyHeldr2 = 0;
 	} 
 	if (gl.keys[XK_Return] && gl.keyHeldf2 == 0 && player2.checkKickState == 0)
@@ -880,25 +880,25 @@ if(player.isDead == false) {
 	    gl.keyHeldf2 = 0;
 	} 
     }
-	//nudge player if colliding
-	if(player.collisionState == true && (player.pos[0] < player2.pos[0]) && (player.pos[1] == player2.pos[1]))
-	{
-	    player.pos[0] -= 1;
-	}
-	else if (player.collisionState == true && (player.pos[0] > player2.pos[0]) && (player.pos[1] == player2.pos[1]))
-	{
-	    player.pos[0] += 1;
-	}
-
-	if(player2.collisionState == true && (player2.pos[0] < player.pos[0]) && (player.pos[1] == player2.pos[1]))
-	{
-	    player2.pos[0] -= 1;
-	}
-	else if (player2.collisionState == true && (player2.pos[0] > player.pos[0]) && (player.pos[1] == player2.pos[1]))
-	{
-	    player2.pos[0] += 1;
-	}	
+    //nudge player if colliding
+    if(player.collisionState == true && (player.pos[0] < player2.pos[0]) && (player.pos[1] == player2.pos[1]))
+    {
+	player.pos[0] -= 1;
     }
+    else if (player.collisionState == true && (player.pos[0] > player2.pos[0]) && (player.pos[1] == player2.pos[1]))
+    {
+	player.pos[0] += 1;
+    }
+
+    if(player2.collisionState == true && (player2.pos[0] < player.pos[0]) && (player.pos[1] == player2.pos[1]))
+    {
+	player2.pos[0] -= 1;
+    }
+    else if (player2.collisionState == true && (player2.pos[0] > player.pos[0]) && (player.pos[1] == player2.pos[1]))
+    {
+	player2.pos[0] += 1;
+    }	
+}
 
 
 
@@ -936,7 +936,7 @@ void render()
 
 	//Display keys to press for menu options
 
-	
+
 	displayText(gl.xres/2,gl.yres/1.2,"Press 'm' for menu");
 	displayText(gl.xres/2,gl.yres/1.2 - 30, "Press 'esc' to quit game");
 
