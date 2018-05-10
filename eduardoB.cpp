@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "header.h"
 
-Image img[1] = {"seamless_background.jpg"};
+Image img[1] = {"seamless_background_alt.jpg"};
 Image img2[1] = {"opt2_back.jpg"};
 
 using namespace std;
